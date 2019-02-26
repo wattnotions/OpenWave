@@ -57,18 +57,21 @@ def double_integrate_data(z_accels, dx_times):
 
 
 
-### double integrate the acceleration data in chunks ###
+### split a list into chunks of size n ###
 def chunks(l, n):
     # For item i in a range that is a length of l,
     for i in range(0, len(l), n):
         # Create an index range for l of n items:
         yield l[i:i+n]
-        
-#velocity_chunk = []
-#location_chunk = []
-#for h in range(len(dx_times)):
-#	velocity_chunk = it.cumtrapz(filtered_z_axis,dx_times)
-#	location_chunk = it.cumtrapz(velocity,dx_times)
+
+
+### integrate the acceleration data in chunks ###
+def chunk_integrate():        
+	velocity_chunk = []
+	location_chunk = []
+	for h in range(len(dx_times)):
+		velocity_chunk = it.cumtrapz(filtered_z_axis,dx_times)
+		location_chunk = it.cumtrapz(velocity,dx_times)
 
 
 ### plot the data ###
@@ -89,8 +92,12 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 #	print str("%.2f" % z_accels[i]) + "," + str("%.2f" % velocity[i]) + "," + str("%.2f" % location[i])
 
 
+
 timestamps, z_accels = get_csv_data()
-dx_times = format_millis_to_xaxis(timestamps)
-filtered_z_axis = filter_accel_data(z_accels)
-velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
+for x in chunks(z_accels, 77):
+	print x
+
+#dx_times = format_millis_to_xaxis(timestamps)
+#filtered_z_axis = filter_accel_data(z_accels)
+#velocity, location = double_integrate_data(filtered_z_axis, dx_times)
+#plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
