@@ -13,7 +13,7 @@ dx_times = []
 def get_csv_data():
 	timestamps = []
 	z_accels= []
-	with open('test3/datalog.csv', 'rU') as csvfile:
+	with open('test_data/datalog.csv', 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
 			if row:
