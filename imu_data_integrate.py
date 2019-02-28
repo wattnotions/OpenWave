@@ -4,6 +4,7 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+import sys
 fs = 19.23 # Sampling frequency
 
 
@@ -27,11 +28,11 @@ def get_csv_data():
 
 ### convert the millisecond timestamps into a suitable time x axis ###
 
-def format_millis_to_xaxis(timestamps):
+def format_millis_to_xaxis(timestamps, scale_factor):
 	array_length = len(timestamps)
 	dx_times.append(0.00)
 	for idx in range(array_length-1):
-		dx_times.append( (float(timestamps[idx+1]) - float(timestamps[0]))/1000)
+		dx_times.append( (float(timestamps[idx+1]) - float(timestamps[0]))/scale_factor)##make scale factor 1000 to go from secods to milliseconds
 	
 	return dx_times
 	
@@ -94,10 +95,41 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 
 
 timestamps, z_accels = get_csv_data()
-for x in chunks(z_accels, 77):
-	print x
+dx_times = format_millis_to_xaxis(timestamps, 1000)
+filtered_z_axis = filter_accel_data(z_accels)
 
-#dx_times = format_millis_to_xaxis(timestamps)
-#filtered_z_axis = filter_accel_data(z_accels)
+###prototype chunk integration code###
+z_accels_chunks = []
+x_axis_chunks   = []
+zeroed_x_axis   = []
+velocity_chunk  = []
+location_chunk  = []
+
+for x in chunks(filtered_z_axis, 77):
+	z_accels_chunks.append(x)
+	
+for y in chunks(dx_times, 77):
+	x_axis_chunks.append(y)
+	
+print len(filtered_z_axis)
+print len(dx_times)
+	
+for i in x_axis_chunks[:2]:
+	print i
+	zeroed_x_axis.append(format_millis_to_xaxis(i,1))
+	
+print zeroed_x_axis[:2]
+
+sys.exit()
+		
+for h in zeroed_x_axis:
+	print len(h)
+	print len(z_accels_chunks)
+	velocity_chunk.append(it.cumtrapz(z_accels_chunks,h))
+	location_chunk.append(it.cumtrapz(velocity,h[:-1]))
+
+###
+	
+
 #velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 #plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
