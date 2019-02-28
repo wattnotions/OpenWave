@@ -101,18 +101,23 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	for idx, h in enumerate(x_axis_chunks):
 		velocity_chunk.append(it.cumtrapz(z_accels_chunks[idx],h))
 		location_chunk.append(it.cumtrapz(velocity_chunk[-1],h[:-1]))
-
-	stitched_location = []	
+	
+	stitched_location = []
+	max_heights       = []
+		
 	for h in location_chunk:
+		max_heights.append(float(max(h)) + 0.32)
 		for x in h:
 			stitched_location.append(x)
-		
-		
+	
+	print sum(max_heights) / float(len(max_heights))		
+	print sum(stitched_location) / float(len(stitched_location))	
 	plt.plot(dx_times[:1547], stitched_location, label='location')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
 	plt.show()
+	
 	
 def detrend_data(dx_times, velocity, location):
 	plt.plot(dx_times[:-1], signal.detrend(velocity), label='velocity')
