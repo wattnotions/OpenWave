@@ -103,6 +103,14 @@ def chunk_integrate(dx_times, filtered_z_axis):
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
 	plt.show()
+	
+def detrend_data(dx_times, velocity, location):
+	plt.plot(dx_times[:-1], signal.detrend(velocity), label='velocity')
+	plt.legend()
+	plt.show()
+
+	
+	
 		
 
 
@@ -111,7 +119,6 @@ def chunk_integrate(dx_times, filtered_z_axis):
 def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 	plt.plot(dx_times, z_accels, label='z-axis acceleration')
 	plt.plot(dx_times, filtered_z_axis, label='filtered z-axis acceleration')
-
 	plt.plot(dx_times[:-1], velocity, label='z-axis velocity')
 	plt.plot(dx_times[:-2], location, label='location')
 	plt.ylabel('Acceleration ($ms^{2}$)')
@@ -128,6 +135,7 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 timestamps, z_accels = get_csv_data()
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
-chunk_integrate(dx_times, filtered_z_axis)
+#chunk_integrate(dx_times, filtered_z_axis)
 velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
+detrend_data(dx_times, velocity, location)
+#plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
