@@ -39,8 +39,6 @@ def format_millis_to_xaxis(timestamps, scale_factor):
 	
 	return dx_times
 	
-#x_axis = copy.copy(dx_times)
-
 ### filter the acceleration data ###
 def filter_accel_data(z_accels):
 	fc = 2  # Cut-off frequency of the filter
