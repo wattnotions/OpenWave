@@ -68,20 +68,30 @@ def chunks(l, n):
 
 
 ### integrate the acceleration data in chunks ###
-def chunk_integrate(dx_times, filtered_z_axis):        
+def chunk_integrate(dx_times, filtered_z_axis, peaks):        
 	z_accels_chunks = []
 	x_axis_chunks   = []
 	zeroed_x_axis   = []
 	velocity_chunk  = []
 	location_chunk  = []
 
-	for x in chunks(filtered_z_axis, 77):
-		z_accels_chunks.append(x)
+	#for x in chunks(filtered_z_axis, 77):
+	#	z_accels_chunks.append(x)
 		
-	for y in chunks(dx_times, 77):
-		x_axis_chunks.append(y)
+	#for y in chunks(dx_times, 77):
+	#	x_axis_chunks.append(y)
+	
+	len_array = len(peaks)
+	print len_array
+	
+	for idx in range(len_array-1):
+		z_accels_chunks.append(filtered_z_axis[peaks[idx]:peaks[idx+1]])
+		x_axis_chunks.append(dx_times[peaks[idx]:peaks[idx+1]])
 		
+	for h in x_axis_chunks[:5]:
+		print h
 		
+	
 	for i in x_axis_chunks[:10]:
 		zeroed_x_axis.append((format_millis_to_xaxis(i,1)))
 		
@@ -98,7 +108,7 @@ def chunk_integrate(dx_times, filtered_z_axis):
 			stitched_location.append(x)
 		
 		
-	plt.plot(dx_times[:1576], stitched_location, label='location')
+	plt.plot(dx_times[:1547], stitched_location, label='location')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
@@ -110,17 +120,31 @@ def detrend_data(dx_times, velocity, location):
 	plt.show()
 
 	
+def find_peaks(filtered_z_axis):
+	peaks, properties = signal.find_peaks(-filtered_z_axis)#, prominence=(None, 1)
+	#print properties["prominences"].max()
+	#plt.plot(-filtered_z_axis, label='filtered z-axis acceleration')
+	thresh_peaks = []
+	for x in peaks:
+		val = -filtered_z_axis[x]
+		if  val > 2:
+			thresh_peaks.append(x)
+		
+	#plt.plot(thresh_peaks, -filtered_z_axis[thresh_peaks], "x")
+	#plt.legend()
+	#plt.show()
 	
+	return thresh_peaks  ##return all peaks above specified threshold
 		
 
 
 ### plot the data ###
 
 def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
-	plt.plot(dx_times, z_accels, label='z-axis acceleration')
+	#plt.plot(dx_times, z_accels, label='z-axis acceleration')
 	plt.plot(dx_times, filtered_z_axis, label='filtered z-axis acceleration')
-	plt.plot(dx_times[:-1], velocity, label='z-axis velocity')
-	plt.plot(dx_times[:-2], location, label='location')
+	#plt.plot(dx_times[:-1], velocity, label='z-axis velocity')
+	#plt.plot(dx_times[:-2], location, label='location')
 	plt.ylabel('Acceleration ($ms^{2}$)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
@@ -135,7 +159,10 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 timestamps, z_accels = get_csv_data()
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
-#chunk_integrate(dx_times, filtered_z_axis)
+
 velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-detrend_data(dx_times, velocity, location)
+#detrend_data(dx_times, velocity, location)
+peaks = find_peaks(filtered_z_axis)
+chunk_integrate(dx_times, filtered_z_axis, peaks)
+
 #plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
