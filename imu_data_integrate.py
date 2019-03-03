@@ -168,13 +168,11 @@ def example_plot1(): ## plots z accel, filtered z accel, velocity and location
 	plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
 	
 
+
 timestamps, z_accels = get_csv_data()
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
-
 velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-#detrend_data(dx_times, velocity, location)
 peaks = find_peaks(filtered_z_axis)
 chunk_integrate(dx_times, filtered_z_axis, peaks)
-
-#plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
+plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
