@@ -9,10 +9,17 @@ fs = 19.23 # Sampling frequency
 
 
 
+
+
 ### open csv file and get required parameters ###
+###csv format : (lin accel) X, Y, Z, (Euler) X, Y, Z, (MAG) X, Y , TIMESTAMP######
+
+
 def get_csv_data():
 	timestamps = []
-	z_accels= []
+	z_accels   = []
+	pitch      = []
+	roll       = []
 	with open('test_data/datalog.csv', 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
@@ -20,9 +27,12 @@ def get_csv_data():
 				#print row
 				timestamps.append (row[-1])
 				z_accels.append(float(row[2]))
+				pitch.append(float(row[3]))
+				roll.append(float(row[4]))
+				
 
 
-	return [timestamps,z_accels]
+	return [timestamps,z_accels, pitch, roll]
 
 
 ### convert the millisecond timestamps into a suitable time x axis ###
@@ -52,7 +62,6 @@ def filter_accel_data(z_accels):
 def double_integrate_data(z_accels, dx_times):
 	velocity = it.cumtrapz(filtered_z_axis,dx_times)
 
-	print len(velocity)
 	detrended_velocity = signal.detrend(velocity)
 	location = it.cumtrapz(velocity,dx_times[:-1])
 	return [velocity,location]
@@ -82,21 +91,15 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	#	x_axis_chunks.append(y)
 	
 	len_array = len(peaks)
-	print len_array
 	
 	for idx in range(len_array-1):
 		z_accels_chunks.append(filtered_z_axis[peaks[idx]:peaks[idx+1]])
 		x_axis_chunks.append(dx_times[peaks[idx]:peaks[idx+1]])
 		
-	for h in x_axis_chunks[:5]:
-		print h
-		
 	
 	for i in x_axis_chunks[:10]:
 		zeroed_x_axis.append((format_millis_to_xaxis(i,1)))
-		
-	print len(z_accels_chunks)
-	print len(x_axis_chunks)
+
 
 	for idx, h in enumerate(x_axis_chunks):
 		velocity_chunk.append(it.cumtrapz(z_accels_chunks[idx],h))
@@ -110,9 +113,9 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 		for x in h:
 			stitched_location.append(x)
 	
-	print sum(max_heights) / float(len(max_heights))		
-	print sum(stitched_location) / float(len(stitched_location))	
-	plt.plot(dx_times[:1547], stitched_location, label='location')
+	print "Displacement Offset = " + str(sum(max_heights) / float(len(max_heights))) + " Meters"		
+	print "Average Maximum Displacement = " + str(sum(stitched_location) / float(len(stitched_location))) + " Meters"
+	plt.plot(dx_times[:1547], stitched_location, label='displacement')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
@@ -156,23 +159,38 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 	plt.show()
 
 
-#for i in range(len(location)):
-#	print str("%.2f" % z_accels[i]) + "," + str("%.2f" % velocity[i]) + "," + str("%.2f" % location[i])
-
-
 def example_plot1(): ## plots z accel, filtered z accel, velocity and location
-	timestamps, z_accels = get_csv_data()
+	timestamps, z_accels = get_csv_data()[:2]
 	dx_times = format_millis_to_xaxis(timestamps, 1000)
 	filtered_z_axis = filter_accel_data(z_accels)
 	velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 	plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
 	
+def example_plot2(): # plot displacement using peak detect to reset integration
+	timestamps, z_accels = get_csv_data()[:2]
+	dx_times = format_millis_to_xaxis(timestamps, 1000)
+	filtered_z_axis = filter_accel_data(z_accels)
+	velocity, location = double_integrate_data(filtered_z_axis, dx_times)
+	peaks = find_peaks(filtered_z_axis)
+	chunk_integrate(dx_times, filtered_z_axis, peaks)
+	
+	
+	
+def pitch_roll_to_direction():
+	pass
 
 
-timestamps, z_accels = get_csv_data()
+timestamps, z_accels = get_csv_data()[:2]
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
+
+a = np.array(filtered_z_axis)
+zero_crossings = np.where(np.diff(np.signbit(a)))[0]
+print(zero_crossings)
+
 velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 peaks = find_peaks(filtered_z_axis)
 chunk_integrate(dx_times, filtered_z_axis, peaks)
 plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
+
+
