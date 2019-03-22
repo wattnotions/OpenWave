@@ -60,7 +60,7 @@ def filter_accel_data(z_accels):
 	
 ### integrate the z axis data twice to get displacement ###	
 def double_integrate_data(z_accels, dx_times):
-	velocity = it.cumtrapz(filtered_z_axis,dx_times)
+	velocity = it.cumtrapz(z_accels,dx_times)
 
 	detrended_velocity = signal.detrend(velocity)
 	location = it.cumtrapz(velocity,dx_times[:-1])
@@ -107,15 +107,35 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	
 	stitched_location = []
 	max_heights       = []
-		
-	for h in location_chunk:
-		max_heights.append(float(max(h)) + 0.32)
-		for x in h:
-			stitched_location.append(x)
 	
-	print "Displacement Offset = " + str(sum(max_heights) / float(len(max_heights))) + " Meters"		
-	print "Average Maximum Displacement = " + str(sum(stitched_location) / float(len(stitched_location))) + " Meters"
-	plt.plot(dx_times[:1547], stitched_location, label='displacement')
+	
+	
+	#check each chunk for the max displacement in that chunk
+	for h in location_chunk:
+		max_heights.append(float(max(h)))
+		print (max(h))
+	
+	avg_max_displacement =  (sum(max_heights) / float(len(max_heights)))
+
+	#stitch all of the chunks together	
+	for x in location_chunk:
+		for y in x:
+			stitched_location.append(y)
+			
+	#get the average displacement of the data and remove any offset present
+	displacement_offset =  sum(stitched_location) / float(len(stitched_location))
+	stitched_location_offset_adj = []	
+	for h in stitched_location:
+		stitched_location_offset_adj.append(h - float(displacement_offset))
+		
+		
+		
+	print len(stitched_location)
+	print len(dx_times)
+	
+	print "Displacement Offset = " + str(displacement_offset) + " Meters"		
+	print "Average Maximum Displacement = " + str(avg_max_displacement) + " Meters"
+	plt.plot(dx_times[:len(stitched_location)], stitched_location_offset_adj, label='displacement')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
@@ -172,7 +192,7 @@ def example_plot2(): # plot displacement using peak detect to reset integration
 	filtered_z_axis = filter_accel_data(z_accels)
 	velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 	peaks = find_peaks(filtered_z_axis)
-	chunk_integrate(dx_times, filtered_z_axis, peaks)
+	chunk_integrate(dx_times, z_accels, peaks)
 	
 	
 	
@@ -180,6 +200,9 @@ def pitch_roll_to_direction():
 	pass
 
 
+
+#example_plot1()
+example_plot2()
 timestamps, z_accels = get_csv_data()[:2]
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
@@ -190,7 +213,7 @@ print(zero_crossings)
 
 velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 peaks = find_peaks(filtered_z_axis)
-chunk_integrate(dx_times, filtered_z_axis, peaks)
+chunk_integrate(dx_times, filtered_z_axis, zero_crossings)
 plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
 
 
