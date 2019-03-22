@@ -84,30 +84,21 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	velocity_chunk  = []
 	location_chunk  = []
 
-	#for x in chunks(filtered_z_axis, 77):
-	#	z_accels_chunks.append(x)
-		
-	#for y in chunks(dx_times, 77):
-	#	x_axis_chunks.append(y)
-	
 	len_array = len(peaks)
 	
-	for idx in range(len_array-1):
+	#use the peaks index numbers to split the z_accels and x_axis times into chunks
+	for idx in range(len_array-1):  
 		z_accels_chunks.append(filtered_z_axis[peaks[idx]:peaks[idx+1]])
 		x_axis_chunks.append(dx_times[peaks[idx]:peaks[idx+1]])
 		
 	
-	for i in x_axis_chunks[:10]:
-		zeroed_x_axis.append((format_millis_to_xaxis(i,1)))
-
-
+	#double integrate each of the z_accel chunks to get velocity chunks
 	for idx, h in enumerate(x_axis_chunks):
 		velocity_chunk.append(it.cumtrapz(z_accels_chunks[idx],h))
 		location_chunk.append(it.cumtrapz(velocity_chunk[-1],h[:-1]))
 	
 	stitched_location = []
 	max_heights       = []
-	
 	
 	
 	#check each chunk for the max displacement in that chunk
@@ -124,9 +115,10 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 			
 	#get the average displacement of the data and remove any offset present
 	displacement_offset =  sum(stitched_location) / float(len(stitched_location))
+	displacement_offset = -displacement_offset
 	stitched_location_offset_adj = []	
 	for h in stitched_location:
-		stitched_location_offset_adj.append(h - float(displacement_offset))
+		stitched_location_offset_adj.append(h + float(displacement_offset))
 		
 		
 		
@@ -134,7 +126,7 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	print len(dx_times)
 	
 	print "Displacement Offset = " + str(displacement_offset) + " Meters"		
-	print "Average Maximum Displacement = " + str(avg_max_displacement) + " Meters"
+	print "Average Maximum Displacement = " + str(avg_max_displacement+displacement_offset) + " Meters"
 	plt.plot(dx_times[:len(stitched_location)], stitched_location_offset_adj, label='displacement')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
