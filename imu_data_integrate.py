@@ -102,6 +102,12 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	
 	#double integrate each of the z_accel chunks to get velocity chunks
 	
+	for h,g in zip(z_accels_chunks[0], z_accels_chunks[1]):
+		print h,g
+	
+	
+	print "........."
+	
 	for x,y in zip(z_accels_chunks, x_axis_chunks):
 		print x[0],x[-1],y[0],y[-1]
 	
@@ -111,15 +117,47 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	for idx, h in enumerate(x_axis_chunks):
 		
 		velocity_chunk.append(it.cumtrapz(z_accels_chunks[idx],h))
-		location_chunk.append(it.cumtrapz(velocity_chunk[-1],h[:-1]))
+		location_chunk.append(it.cumtrapz(remove_dc_offset(velocity_chunk[-1]),h[:-1]))
+	
+	plt.subplot(3, 1, 1)	
+	plt.ylabel('Acceleration (ms^-2)')
+	for loc,x in zip(z_accels_chunks, x_axis_chunks):
+		print loc[0],loc[-1],x[0],x[-1]
+		plt.plot(x[:len(loc)], loc, "--")
 		
+	xcoords = []
+	for h in x_axis_chunks:
+		xcoords.append(h[0])
+	for xc in xcoords:
+		plt.axvline(x=xc)
+		
+	
+	plt.subplot(3, 1, 2)
+	plt.ylabel('Velocity (m/s)')
+	
+	for h in x_axis_chunks:
+		xcoords.append(h[0])
+	for xc in xcoords:
+		plt.axvline(x=xc)
+	
+	for loc,x in zip(velocity_chunk, x_axis_chunks):
+		print loc[0],loc[-1],x[0],x[-1]
+		plt.plot(x[:len(loc)], remove_dc_offset(loc), "--")
+		
+	plt.subplot(3, 1, 3)
+	plt.ylabel('Displacement (m)')
+	xcoords = []
+	for h in x_axis_chunks:
+		xcoords.append(h[0])
+	for xc in xcoords:
+		plt.axvline(x=xc)
 	for loc,x in zip(location_chunk, x_axis_chunks):
 		print loc[0],loc[-1],x[0],x[-1]
 		plt.plot(x[:len(loc)], loc, "o")
-		
-	for loc,x in zip(velocity_chunk, x_axis_chunks):
-		print loc[0],loc[-1],x[0],x[-1]
-		plt.plot(x[:len(loc)], loc, "--")
+	
+	#for loc,x in zip(z_accels_chunks, x_axis_chunks):
+	#	print loc[0],loc[-1],x[0],x[-1]
+	#	plt.plot(x[:len(loc)], loc, "x")
 	
 #	myzip = zip(x_axis_chunks[1],location_chunk[1])
 #	for h in myzip:
@@ -178,7 +216,7 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 		plt.axvline(x=xc)
 		
 	#plt.plot(dx_times[:len(stitched_velocity)], stitched_velocity, "x", label='velocity')
-	plt.ylabel('Displacement (m)')
+	#plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
 	plt.show()
@@ -266,6 +304,18 @@ def example_plot2(): # plot displacement using peak detect to reset integration
 	
 def pitch_roll_to_direction():
 	pass
+	
+def make_sine_wave():
+	Fs = 20
+	f = 0.2
+	sample = 462
+	x = np.arange(sample)
+	y = (0.3*np.sin((2 * np.pi * f * x / Fs)))-0.3
+	return y
+	#plt.plot(x, y)
+	#plt.xlabel('sample(n)')
+	#plt.ylabel('voltage(V)')
+	#plt.show()
 
 
 
@@ -275,6 +325,7 @@ timestamps, z_accels = get_csv_data()[:2]
 dx_times = format_millis_to_xaxis(timestamps, 1000)
 filtered_z_axis = filter_accel_data(z_accels)
 
+#filtered_z_axis = make_sine_wave()
 a = np.array(filtered_z_axis)
 zero_crossings = np.where(np.diff(np.signbit(a)))[0]
 print(zero_crossings)
@@ -283,7 +334,8 @@ velocity, location = double_integrate_data(filtered_z_axis, dx_times)
 peaks = find_peaks(filtered_z_axis)
 print peaks
 #chunk_integrate(dx_times, remove_dc_offset(z_accels), zero_crossings)
-chunk_integrate(dx_times, remove_dc_offset(z_accels), peaks)
+chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), peaks)
 #plot_data(remove_dc_offset(filtered_z_axis), filtered_z_axis, velocity, location, dx_times)
+
 
 
