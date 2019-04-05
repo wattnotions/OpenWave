@@ -217,22 +217,6 @@ def remove_dc_offset(data): # calculates average and removes any offset from dat
 		output.append(h+avg)
 	return output
 
-def example_plot1(): ## plots z accel, filtered z accel, velocity and location
-	timestamps, z_accels = get_csv_data()[:2]
-	dx_times = format_millis_to_xaxis(timestamps, 1000)
-	filtered_z_axis = filter_accel_data(z_accels)
-	velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-	plot_data(z_accels, filtered_z_axis, velocity, location, dx_times)
-	
-def example_plot2(): # plot displacement using peak detect to reset integration
-	timestamps, z_accels = get_csv_data()[:2]
-	dx_times = format_millis_to_xaxis(timestamps, 1000)
-	filtered_z_axis = filter_accel_data(z_accels)
-	velocity, location = double_integrate_data(filtered_z_axis, dx_times)
-	peaks = find_peaks(filtered_z_axis)
-	chunk_integrate(dx_times, filtered_z_axis, peaks)
-	
-	
 	
 def pitch_roll_to_direction():
 	pass
@@ -250,9 +234,6 @@ def get_zero_crossings():
 	zero_crossings = np.where(np.diff(np.signbit(a)))[0]
 	return zero_crossings	
 
-	
-
-
 
 def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot and analyze
 	timestamps, z_accels = get_csv_data()[:2]
@@ -263,6 +244,6 @@ def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot an
 	chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	chunk_analyze(velocity_chunks, location_chunks)
 
-time_to_get_chunky()
+
 
 
