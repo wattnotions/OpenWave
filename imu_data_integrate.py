@@ -90,6 +90,9 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 
 	len_array = len(peaks)
 	
+	print len (dx_times)
+	print len (filtered_z_axis)
+	
 	#use the peaks index numbers to split the z_accels and x_axis times into chunks
 	for idx in range(len_array-1):  
 		z_accels_chunks.append(filtered_z_axis[peaks[idx]:peaks[idx+1]])
@@ -98,13 +101,32 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	
 	
 	#double integrate each of the z_accel chunks to get velocity chunks
+	
+	for x,y in zip(z_accels_chunks, x_axis_chunks):
+		print x[0],x[-1],y[0],y[-1]
+	
+	print dx_times[peaks[0]]
+	print dx_times[peaks[-1]]
+	
 	for idx, h in enumerate(x_axis_chunks):
+		
 		velocity_chunk.append(it.cumtrapz(z_accels_chunks[idx],h))
 		location_chunk.append(it.cumtrapz(velocity_chunk[-1],h[:-1]))
 		
-
+	for loc,x in zip(location_chunk, x_axis_chunks):
+		print loc[0],loc[-1],x[0],x[-1]
+		plt.plot(x[:len(loc)], loc, "o")
+		
+	for loc,x in zip(velocity_chunk, x_axis_chunks):
+		print loc[0],loc[-1],x[0],x[-1]
+		plt.plot(x[:len(loc)], loc, "--")
+	
+#	myzip = zip(x_axis_chunks[1],location_chunk[1])
+#	for h in myzip:
+#		print h
 	
 	stitched_location = []
+	stitched_velocity = []
 	max_heights       = []
 	min_heights       = []
 	displacements     = []
@@ -117,7 +139,7 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 		displacements.append(abs(max(h))+abs(min(h)))
 
 		
-	
+	print displacements
 	avg_max_displacement =  (sum(max_heights) / float(len(max_heights)))
 	avg_min_displacement =  (sum(min_heights) / float(len(min_heights)))
 	
@@ -133,6 +155,10 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 		for y in x:
 			stitched_location.append(y)
 			
+	for x in velocity_chunk:
+		for y in x:
+			stitched_velocity.append(y)
+			
 	#get the average displacement of the data and remove any offset present
 	displacement_offset =  sum(stitched_location) / float(len(stitched_location))
 	displacement_offset = -displacement_offset
@@ -140,10 +166,18 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 	for h in stitched_location:
 		stitched_location_offset_adj.append(h + float(displacement_offset))
 		
-	
+	print len(stitched_location)
 	print "Median Displacement = " + str(median_displacement) + " Meters"		
-	print "Maximum Displacement = " + str(avg_displacement) + " Meters"
-	plt.plot(dx_times[:len(stitched_location)], stitched_location, "o", label='displacement')
+	print "Average Chunk Displacement = " + str(avg_displacement) + " Meters"
+#	plt.plot(dx_times[:len(stitched_location)], stitched_location, "o", label='displacement')
+	
+	xcoords = []
+	for h in x_axis_chunks:
+		xcoords.append(h[0])
+	for xc in xcoords:
+		plt.axvline(x=xc)
+		
+	#plt.plot(dx_times[:len(stitched_velocity)], stitched_velocity, "x", label='velocity')
 	plt.ylabel('Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
@@ -160,19 +194,19 @@ def find_peaks(filtered_z_axis):
 	all_peaks=[]
 	thresh_peaks=[]
 	peaks1, properties1 = signal.find_peaks(-filtered_z_axis)#, prominence=(None, 1)
-	peaks2, properties2 = signal.find_peaks(filtered_z_axis)
+	#peaks2, properties2 = signal.find_peaks(filtered_z_axis)
 	
 	
 	for h in peaks1:
 		all_peaks.append(h)
-	for h in peaks2:
-		all_peaks.append(h)
+	#for h in peaks2:
+	#	all_peaks.append(h)
 		
-	print all_peaks
+	
 	
 	
 	thresh_peaks = sorted(all_peaks)
-	print thresh_peaks
+	
 	#print properties["prominences"].max()
 	#plt.plot(-filtered_z_axis, label='filtered z-axis acceleration')
 	#thresh_peaks = []
@@ -182,8 +216,8 @@ def find_peaks(filtered_z_axis):
 	#	thresh_peaks.append(x)
 		
 	
-	plt.plot(-filtered_z_axis, label='filtered z-axis acceleration')
-	plt.plot(thresh_peaks, -filtered_z_axis[thresh_peaks], "x")
+	plt.plot(filtered_z_axis, label='filtered z-axis acceleration')
+	plt.plot(thresh_peaks, filtered_z_axis[thresh_peaks], "x")
 	plt.legend()
 	plt.show()
 	
@@ -194,7 +228,7 @@ def find_peaks(filtered_z_axis):
 ### plot the data ###
 
 def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
-	plt.plot(dx_times, z_accels, label='z-axis acceleration')
+	#plt.plot(dx_times, z_accels, label='z-axis acceleration')
 	plt.plot(dx_times, filtered_z_axis, label='filtered z-axis acceleration')
 	#plt.plot(dx_times[:-1], velocity, label='z-axis velocity')
 	#plt.plot(dx_times[:-2], location, label='location')
