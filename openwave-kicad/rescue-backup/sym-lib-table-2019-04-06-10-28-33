@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name minibuoy_v1-cache)(type Legacy)(uri ${KIPRJMOD}/minibuoy_v1-cache.lib)(options "")(descr ""))
+)
