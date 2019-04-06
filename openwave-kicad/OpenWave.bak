@@ -17,7 +17,7 @@ $EndDescr
 Text Notes 1600 7450 0    70   ~ 0
 DFU boot
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0101
+L wattnotions:+3V3 #+3V0101
 U 1 1 5AD31882
 P 3500 1650
 F 0 "#+3V0101" V 3400 1450 70  0001 L BNN
@@ -94,7 +94,7 @@ F 3 "" H 800 7350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:R-EU_R0603 R1
+L wattnotions:R-EU_R0603 R1
 U 1 1 5AD318CD
 P 1100 6350
 F 0 "R1" H 1150 6400 70  0000 L BNN
@@ -105,7 +105,7 @@ F 3 "" H 1100 6350 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:R-EU_R0603 R4
+L wattnotions:R-EU_R0603 R4
 U 1 1 5AD318CE
 P 1300 6550
 F 0 "R4" H 1150 6609 70  0000 L BNN
@@ -116,7 +116,7 @@ F 3 "" H 1300 6550 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:R-EU_R0603 R2
+L wattnotions:R-EU_R0603 R2
 U 1 1 5AD318CF
 P 1100 6750
 F 0 "R2" H 1150 6800 70  0000 L BNN
@@ -127,7 +127,7 @@ F 3 "" H 1100 6750 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:R-EU_R0603 R5
+L wattnotions:R-EU_R0603 R5
 U 1 1 5AD318D0
 P 1300 6950
 F 0 "R5" H 1100 7000 70  0000 L BNN
@@ -138,7 +138,7 @@ F 3 "" H 1300 6950 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:R-EU_R0603 R3
+L wattnotions:R-EU_R0603 R3
 U 1 1 5AD318D1
 P 1100 7150
 F 0 "R3" H 1150 7200 70  0000 L BNN
@@ -192,8 +192,6 @@ Text Label 6800 4350 0    65   ~ 0
 IO_PB14
 Text Label 6800 4250 0    65   ~ 0
 IO_PB15
-Text Label 3800 5750 2    65   ~ 0
-GSM_PWRKEY
 Text Label 6800 3050 0    65   ~ 0
 LEDR1
 Text Label 6800 5250 0    65   ~ 0
@@ -404,14 +402,10 @@ Text Label 4000 4450 2    10   ~ 0
 SDIO_SW
 Text Label 6700 2550 0    10   ~ 0
 USR_SW
-Text Label 6800 3750 0    60   ~ 0
-INST1_TTL_TX
-Text Label 6800 3850 0    60   ~ 0
-INST1_TTL_RX
 Text Notes 6175 3875 0    43   ~ 0
 TX(4)
 $Comp
-L minibuoy_v1-cache:STM32F405RGT IC1
+L wattnotions:STM32F405RGT IC1
 U 1 1 5AD318B7
 P 5300 4050
 F 0 "IC1" H 6400 6250 86  0000 R BNN
@@ -427,40 +421,14 @@ Text Notes 6175 3675 0    43   ~ 0
 TX(2)
 Text Notes 6175 3575 0    43   ~ 0
 RX(2)
-Text Label 6800 3550 0    60   ~ 0
-INST2_TTL_TX
-Text Label 6800 3650 0    60   ~ 0
-INST2_TTL_RX
 Text Notes 4375 5175 0    43   ~ 0
 TX(6)
 Text Notes 4375 5075 0    43   ~ 0
 RX(6)
-Text Label 3800 5050 2    60   ~ 0
-INST3_TTL_TX
-Text Label 3800 5150 2    60   ~ 0
-INST3_TTL_RX
 Text Notes 6325 5175 2    43   ~ 0
 I2C(1) - SCL
 Text Notes 6325 5075 2    43   ~ 0
 I2C(1) - SDA
-Text Label 6800 5150 0    65   ~ 0
-INA219_SCL
-Text Label 6800 5050 0    65   ~ 0
-INA219_SDA
-Text Label 3800 5250 2    65   ~ 0
-INST1_HSD_SW
-Text Label 3800 5350 2    65   ~ 0
-INST2_HSD_SW
-Text Label 3800 5450 2    65   ~ 0
-INST3_HSD_SW
-Text Label 3800 5550 2    65   ~ 0
-GSM_HSD_SW
-Text Label 3800 5650 2    65   ~ 0
-GPS_HSD_SW
-Text Label 6800 4650 0    65   ~ 0
-GSM_TX
-Text Label 6800 4750 0    65   ~ 0
-GSM_RX
 Text Notes 6275 4775 2    43   ~ 0
 TX(3)
 Text Notes 6275 4675 2    43   ~ 0
@@ -469,10 +437,8 @@ Text GLabel 2100 4550 0    10   UnSpc ~ 0
 GND
 Text GLabel 2000 4950 1    10   UnSpc ~ 0
 GND
-Text Label 6800 5750 0    60   ~ 0
-INA219_HSD_SW
 $Comp
-L minibuoy_v1-cache:+BATT #PWR0101
+L wattnotions:+BATT #PWR0101
 U 1 1 5ADB8D71
 P 9600 1150
 F 0 "#PWR0101" H 9600 1000 50  0001 C CNN
@@ -494,7 +460,7 @@ F 3 "" H 10100 1850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0102
+L wattnotions:+3V3 #+3V0102
 U 1 1 5ADC33A7
 P 10800 1150
 F 0 "#+3V0102" V 10700 950 70  0001 L BNN
@@ -539,8 +505,6 @@ F 3 "" H 10800 1600 50  0001 C CNN
 $EndComp
 Text Label 10050 5000 2    60   ~ 0
 SD_CARD_HSD_3.3V
-Text Label 6800 4950 0    60   ~ 0
-SD_CARD_HSD_SW
 $Comp
 L Connector:USB_OTG J1
 U 1 1 5AD5E1AF
@@ -643,7 +607,7 @@ F 3 "" H 1350 950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0103
+L wattnotions:+3V3 #+3V0103
 U 1 1 5AD70EFD
 P 1350 650
 F 0 "#+3V0103" V 1250 450 70  0001 L BNN
@@ -713,7 +677,7 @@ F 3 "" H 2250 4850 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L minibuoy_v1-cache:Crystal Y2
+L wattnotions:Crystal Y2
 U 1 1 5AD7CC89
 P 2600 4700
 F 0 "Y2" H 2600 4850 50  0000 C CNN
@@ -724,7 +688,7 @@ F 3 "" H 2600 4700 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L minibuoy_v1-cache:Crystal Y1
+L wattnotions:Crystal Y1
 U 1 1 5AD7D122
 P 2600 3800
 F 0 "Y1" H 2600 3950 50  0000 C CNN
@@ -792,7 +756,7 @@ F 3 "" H 1150 3100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0104
+L wattnotions:+3V3 #+3V0104
 U 1 1 5AD8A8FB
 P 1750 2700
 F 0 "#+3V0104" V 1650 2500 70  0001 L BNN
@@ -858,7 +822,7 @@ F 3 "" H 7450 1350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0105
+L wattnotions:+3V3 #+3V0105
 U 1 1 5AD8039C
 P 7950 1100
 F 0 "#+3V0105" V 7850 900 70  0001 L BNN
@@ -871,7 +835,7 @@ $EndComp
 Text Label 7300 4650 0    60   ~ 0
 IO_PB11
 $Comp
-L minibuoy_v1-cache:503182-1852 J2
+L wattnotions:503182-1852 J2
 U 1 1 5ADDFF32
 P 10500 5300
 F 0 "J2" H 10500 6023 50  0000 L BNN
@@ -913,7 +877,7 @@ F 3 "" H 10100 5950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:LT1521-3.3 U1
+L wattnotions:LT1521-3.3 U1
 U 1 1 5ADE2307
 P 10100 1300
 F 0 "U1" H 9950 1425 50  0000 C CNN
@@ -957,7 +921,7 @@ F 3 "" H 8550 4700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0106
+L wattnotions:+3V3 #+3V0106
 U 1 1 5AE76475
 P 8400 4400
 F 0 "#+3V0106" V 8300 4200 70  0001 L BNN
@@ -967,10 +931,8 @@ F 3 "" H 8400 4400 60  0001 C CNN
 	1    8400 4400
 	1    0    0    -1  
 $EndComp
-Text Label 7800 4650 0    60   ~ 0
-GPS_TX
 $Comp
-L minibuoy_v1-cache:+3V3 #+3V0107
+L wattnotions:+3V3 #+3V0107
 U 1 1 5B245524
 P 3150 4550
 F 0 "#+3V0107" V 3050 4350 70  0001 L BNN
@@ -980,10 +942,6 @@ F 3 "" H 3150 4550 60  0001 C CNN
 	1    3150 4550
 	1    0    0    -1  
 $EndComp
-Text Label 7550 5150 0    60   ~ 0
-SI7006_SCL
-Text Label 7550 5050 0    60   ~ 0
-SI7006_SDA
 Wire Wire Line
 	4000 3450 3400 3450
 Wire Wire Line
@@ -1110,8 +1068,6 @@ Wire Wire Line
 	6700 3550 6800 3550
 Wire Wire Line
 	3800 5050 4000 5050
-Wire Wire Line
-	3800 5150 4000 5150
 Wire Wire Line
 	6700 5150 8550 5150
 Wire Wire Line

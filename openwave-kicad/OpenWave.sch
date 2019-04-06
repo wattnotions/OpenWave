@@ -503,8 +503,6 @@ F 3 "" H 10800 1600 50  0001 C CNN
 	1    10800 1600
 	1    0    0    -1  
 $EndComp
-Text Label 10050 5000 2    60   ~ 0
-SD_CARD_HSD_3.3V
 $Comp
 L Connector:USB_OTG J1
 U 1 1 5AD5E1AF
@@ -877,17 +875,6 @@ F 3 "" H 10100 5950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L wattnotions:LT1521-3.3 U1
-U 1 1 5ADE2307
-P 10100 1300
-F 0 "U1" H 9950 1425 50  0000 C CNN
-F 1 "LT1521-3.3" H 10100 1425 50  0000 L CNN
-F 2 "TO_SOT_Packages_SMD:SOT-223-3Lead_TabPin2" H 10100 1550 50  0001 C CIN
-F 3 "" H 10100 1300 50  0001 C CNN
-	1    10100 1300
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C11
 U 1 1 5AD8244D
 P 8200 1350
@@ -1102,14 +1089,9 @@ Wire Wire Line
 Wire Wire Line
 	9600 1300 9700 1300
 Wire Wire Line
-	10100 1600 10100 1800
-Wire Wire Line
-	10400 1300 10500 1300
-Wire Wire Line
 	10800 1150 10800 1300
 Wire Wire Line
 	9700 1300 9700 1450
-Connection ~ 9700 1300
 Wire Wire Line
 	9700 1750 9700 1800
 Wire Wire Line
@@ -1117,7 +1099,6 @@ Wire Wire Line
 Connection ~ 10100 1800
 Wire Wire Line
 	10500 1300 10500 1450
-Connection ~ 10500 1300
 Wire Wire Line
 	10500 1800 10500 1750
 Connection ~ 10800 1300
@@ -1153,7 +1134,7 @@ Wire Wire Line
 Wire Wire Line
 	7800 2550 8850 2550
 Wire Wire Line
-	6700 2950 8850 2950
+	6700 2950 8300 2950
 Wire Wire Line
 	9150 2350 9150 2250
 Wire Wire Line
@@ -1202,8 +1183,6 @@ Wire Wire Line
 	10050 4800 10300 4800
 Wire Wire Line
 	10050 4900 10300 4900
-Wire Wire Line
-	10050 5000 10300 5000
 Wire Wire Line
 	10050 5100 10300 5100
 Wire Wire Line
@@ -1271,8 +1250,6 @@ Wire Wire Line
 Wire Wire Line
 	800  7150 800  7350
 Wire Wire Line
-	9700 1300 9800 1300
-Wire Wire Line
 	10100 1800 10100 1850
 Wire Wire Line
 	10100 1800 10500 1800
@@ -1327,4 +1304,54 @@ Text Notes 5050 6750 0    50   ~ 0
 Bluetooth Adapter
 Text Notes 10250 4400 0    50   ~ 0
 SD Card
+$Comp
+L power:+5V #PWR?
+U 1 1 5CA98EDB
+P 9600 3450
+F 0 "#PWR?" H 9600 3300 50  0001 C CNN
+F 1 "+5V" H 9615 3623 50  0000 C CNN
+F 2 "" H 9600 3450 50  0001 C CNN
+F 3 "" H 9600 3450 50  0001 C CNN
+	1    9600 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8300 2950 8300 3600
+Wire Wire Line
+	8300 3600 9600 3600
+Wire Wire Line
+	9600 3600 9600 3450
+Connection ~ 8300 2950
+Wire Wire Line
+	8300 2950 8850 2950
+$Comp
+L wattnotions:MIC5239-3.3YS U?
+U 1 1 5CAAC9EC
+P 10100 1200
+F 0 "U?" H 10100 1365 50  0000 C CNN
+F 1 "MIC5239-3.3YS" H 10100 1274 50  0000 C CNN
+F 2 "" H 10100 1150 50  0001 C CNN
+F 3 "" H 10100 1150 50  0001 C CNN
+	1    10100 1200
+	1    0    0    -1  
+$EndComp
+Connection ~ 9700 1300
+Connection ~ 10500 1300
+Wire Wire Line
+	10100 1750 10100 1800
+Wire Wire Line
+	9350 5000 9350 4850
+Wire Wire Line
+	9350 5000 10300 5000
+$Comp
+L wattnotions:+3V3 #+3V?
+U 1 1 5CAE2D80
+P 9350 4850
+F 0 "#+3V?" V 9250 4650 70  0001 L BNN
+F 1 "+3V3" V 9250 4650 70  0000 L BNN
+F 2 "" H 9350 4850 60  0001 C CNN
+F 3 "" H 9350 4850 60  0001 C CNN
+	1    9350 4850
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
