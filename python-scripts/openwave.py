@@ -20,10 +20,10 @@ def get_csv_data():
 	z_accels   = []
 	pitch      = []
 	roll       = []
-	with open('z_accel_test_50ms/z_accel_test_50ms.csv', 'rU') as csvfile:
+	with open('test_data/20cm_datalog.csv', 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
-			#row = row[:-1]
+			row = row[:-1]
 			if row:
 				
 				timestamps.append (row[-1])
@@ -244,11 +244,5 @@ def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot an
 
 
 
-timestamps, z_accels = get_csv_data()[:2]
-dx_times = format_millis_to_xaxis(timestamps, 1000)
-filtered_z_axis = filter_accel_data(z_accels)
-peaks = find_peaks(filtered_z_axis)
-velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), peaks)
-chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
-chunk_analyze(velocity_chunks, location_chunks)
+time_to_get_chunky()
 
