@@ -25,4 +25,124 @@ F 3 "https://datasheets.maximintegrated.com/en/ds/MAX3222-MAX3241.pdf" H 6000 35
 	1    6000 3450
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6000 2250 6300 2250
+Wire Wire Line
+	6300 2250 6300 2100
+$Comp
+L power:+3.3V #PWR?
+U 1 1 5CC3B6BA
+P 6300 2100
+F 0 "#PWR?" H 6300 1950 50  0001 C CNN
+F 1 "+3.3V" H 6315 2273 50  0000 C CNN
+F 2 "" H 6300 2100 50  0001 C CNN
+F 3 "" H 6300 2100 50  0001 C CNN
+	1    6300 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CC3B721
+P 6000 4750
+F 0 "#PWR?" H 6000 4500 50  0001 C CNN
+F 1 "GND" H 6005 4577 50  0000 C CNN
+F 2 "" H 6000 4750 50  0001 C CNN
+F 3 "" H 6000 4750 50  0001 C CNN
+	1    6000 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 4650 6000 4750
+Wire Wire Line
+	4950 3950 5200 3950
+Text HLabel 4950 3950 0    50   BiDi ~ 0
+STM_RX
+Text HLabel 4950 3550 0    50   BiDi ~ 0
+STM_TX
+Wire Wire Line
+	4950 3550 5200 3550
+$Comp
+L Device:C C?
+U 1 1 5CC7D0DB
+P 7100 2700
+F 0 "C?" H 7215 2746 50  0000 L CNN
+F 1 "0.1uF" H 7215 2655 50  0000 L CNN
+F 2 "" H 7138 2550 50  0001 C CNN
+F 3 "~" H 7100 2700 50  0001 C CNN
+	1    7100 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5CC7D272
+P 5000 2700
+F 0 "C?" H 5115 2746 50  0000 L CNN
+F 1 "0.1uF" H 5115 2655 50  0000 L CNN
+F 2 "" H 5038 2550 50  0001 C CNN
+F 3 "~" H 5000 2700 50  0001 C CNN
+	1    5000 2700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5CC7D2F0
+P 7300 3050
+F 0 "C?" V 7200 3200 50  0000 C CNN
+F 1 "0.1uF" V 7139 3050 50  0000 C CNN
+F 2 "" H 7338 2900 50  0001 C CNN
+F 3 "~" H 7300 3050 50  0001 C CNN
+	1    7300 3050
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5CC7D32E
+P 7300 3350
+F 0 "C?" V 7200 3500 50  0000 C CNN
+F 1 "0.1uF" V 7400 3500 50  0000 C CNN
+F 2 "" H 7338 3200 50  0001 C CNN
+F 3 "~" H 7300 3350 50  0001 C CNN
+	1    7300 3350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6800 3050 7150 3050
+Wire Wire Line
+	6800 3350 7150 3350
+$Comp
+L power:GND #PWR?
+U 1 1 5CC7D58A
+P 7750 3200
+F 0 "#PWR?" H 7750 2950 50  0001 C CNN
+F 1 "GND" V 7755 3072 50  0000 R CNN
+F 2 "" H 7750 3200 50  0001 C CNN
+F 3 "" H 7750 3200 50  0001 C CNN
+	1    7750 3200
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7450 3050 7750 3050
+Wire Wire Line
+	7750 3050 7750 3200
+Wire Wire Line
+	7750 3200 7750 3350
+Wire Wire Line
+	7750 3350 7450 3350
+Connection ~ 7750 3200
+Text HLabel 6950 3550 2    50   BiDi ~ 0
+RS232_TX
+Wire Wire Line
+	6800 3550 6950 3550
+Text HLabel 7000 3950 2    50   BiDi ~ 0
+RS232_RX
+Wire Wire Line
+	6800 3950 7000 3950
+Wire Wire Line
+	6800 2550 7100 2550
+Wire Wire Line
+	6800 2850 7100 2850
+Wire Wire Line
+	5200 2550 5000 2550
+Wire Wire Line
+	5200 2850 5000 2850
 $EndSCHEMATC
