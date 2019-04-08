@@ -258,20 +258,36 @@ X R2OUT 9 -800 -700 200 R 50 50 1 1 O
 ENDDRAW
 ENDDEF
 #
-# Switch_SW_Push
+# dk_Tactile-Switches_TL3315NF160Q
 #
-DEF Switch_SW_Push SW 0 40 N N 1 F N
-F0 "SW" 50 100 50 H V L CNN
-F1 "Switch_SW_Push" 0 -60 50 H V C CNN
-F2 "" 0 200 50 H I C CNN
-F3 "" 0 200 50 H I C CNN
+DEF dk_Tactile-Switches_TL3315NF160Q S 0 40 Y Y 1 F N
+F0 "S" 0 200 60 H V C CNN
+F1 "dk_Tactile-Switches_TL3315NF160Q" 0 -200 60 H V C CNN
+F2 "digikey-footprints:Switch_Tactile_SMD_4.5x4.5mm_TL3315NF160Q" 200 200 60 H I L CNN
+F3 "http://spec_sheets.e-switch.com/specs/P010337.pdf" 200 300 60 H I L CNN
+F4 "EG4621CT-ND" 200 400 60 H I L CNN "Digi-Key_PN"
+F5 "TL3315NF160Q" 200 500 60 H I L CNN "MPN"
+F6 "Switches" 200 600 60 H I L CNN "Category"
+F7 "Tactile Switches" 200 700 60 H I L CNN "Family"
+F8 "http://spec_sheets.e-switch.com/specs/P010337.pdf" 200 800 60 H I L CNN "DK_Datasheet_Link"
+F9 "/product-detail/en/e-switch/TL3315NF160Q/EG4621CT-ND/1870401" 200 900 60 H I L CNN "DK_Detail_Page"
+F10 "SWITCH TACTILE SPST-NO 0.05A 15V" 200 1000 60 H I L CNN "Description"
+F11 "E-Switch" 200 1100 60 H I L CNN "Manufacturer"
+F12 "Active" 200 1200 60 H I L CNN "Status"
 DRAW
-C -80 0 20 0 1 0 N
-C 80 0 20 0 1 0 N
-P 2 0 1 0 0 50 0 120 N
-P 2 0 1 0 100 50 -100 50 N
-X 1 1 -200 0 100 R 50 50 0 1 P
-X 2 2 200 0 100 L 50 50 0 1 P
+C -60 0 10 0 1 0 N
+C 60 0 10 0 1 0 N
+P 2 0 1 0 -100 100 -100 -100 N
+P 2 0 1 0 -70 0 -100 0 N
+P 2 0 1 0 -70 50 70 50 N
+P 2 0 1 0 100 -100 100 100 N
+P 2 0 1 0 100 0 70 0 N
+P 2 1 1 0 -40 110 35 110 N
+P 2 1 1 0 0 110 0 50 N
+X ~ 1 -200 100 100 R 50 50 1 1 P
+X ~ 2 -200 -100 100 R 50 50 1 1 P
+X ~ 3 200 100 100 L 50 50 1 1 P
+X ~ 4 200 -100 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
