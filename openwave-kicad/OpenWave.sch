@@ -950,8 +950,6 @@ Wire Wire Line
 Wire Wire Line
 	2800 4350 2800 4850
 Wire Wire Line
-	4000 4250 2600 4250
-Wire Wire Line
 	4000 3750 2900 3750
 Wire Wire Line
 	2900 3750 2900 3950
@@ -1101,8 +1099,6 @@ Connection ~ 8300 5750
 Wire Wire Line
 	2400 4550 2600 4550
 Wire Wire Line
-	2600 4550 2600 4250
-Wire Wire Line
 	8400 5050 8400 4850
 Wire Wire Line
 	8550 5150 8550 4850
@@ -1180,15 +1176,9 @@ Wire Wire Line
 Wire Wire Line
 	2000 4850 2000 5050
 Wire Wire Line
-	2400 3650 4000 3650
-Wire Wire Line
-	2400 3950 2900 3950
-Wire Wire Line
 	7800 5750 8100 5750
 Wire Wire Line
 	7800 6050 8100 6050
-Wire Wire Line
-	2400 4850 2800 4850
 Wire Wire Line
 	8300 6050 8550 6050
 Wire Wire Line
@@ -1410,7 +1400,7 @@ Wire Wire Line
 	10200 1100 10200 1200
 Connection ~ 10200 1100
 Wire Wire Line
-	10200 1100 10750 1100
+	10200 1100 10450 1100
 Wire Wire Line
 	10200 1500 10200 1600
 Wire Wire Line
@@ -1469,9 +1459,9 @@ STM_RX2
 Text Label 6800 3650 0    50   ~ 0
 STM_TX2
 Text Label 4950 7150 2    50   ~ 0
-RX2
+RX3
 Text Label 4950 7050 2    50   ~ 0
-TX2
+TX3
 Wire Wire Line
 	4950 7050 5150 7050
 Wire Wire Line
@@ -1500,9 +1490,9 @@ Wire Wire Line
 Wire Wire Line
 	10350 3850 10250 3850
 Text Label 10250 3750 2    50   ~ 0
-STM_RX3
+STM_RX2
 Text Label 10250 3850 2    50   ~ 0
-STM_TX3
+STM_TX2
 $Sheet
 S 10350 3650 500  450 
 U 5CB14458
@@ -1546,10 +1536,10 @@ Wire Wire Line
 Wire Wire Line
 	4400 950  4500 950 
 $Comp
-L dk_Tactile-Switches:TL3315NF160Q S?
+L dk_Tactile-Switches:TL3315NF160Q S1
 U 1 1 5CAE2BA4
 P 1000 1100
-F 0 "S?" H 1000 1447 60  0000 C CNN
+F 0 "S1" H 1000 1447 60  0000 C CNN
 F 1 "TL3315NF160Q" H 1000 1341 60  0000 C CNN
 F 2 "digikey-footprints:Switch_Tactile_SMD_4.5x4.5mm_TL3315NF160Q" H 1200 1300 60  0001 L CNN
 F 3 "http://spec_sheets.e-switch.com/specs/P010337.pdf" H 1200 1400 60  0001 L CNN
@@ -1570,10 +1560,10 @@ Wire Wire Line
 Wire Wire Line
 	1200 1200 1350 1200
 $Comp
-L dk_Tactile-Switches:TL3315NF160Q S?
+L dk_Tactile-Switches:TL3315NF160Q S2
 U 1 1 5CAFC64D
 P 1100 2800
-F 0 "S?" H 1100 3147 60  0000 C CNN
+F 0 "S2" H 1100 3147 60  0000 C CNN
 F 1 "TL3315NF160Q" H 1100 3041 60  0000 C CNN
 F 2 "digikey-footprints:Switch_Tactile_SMD_4.5x4.5mm_TL3315NF160Q" H 1300 3000 60  0001 L CNN
 F 3 "http://spec_sheets.e-switch.com/specs/P010337.pdf" H 1300 3100 60  0001 L CNN
@@ -1593,4 +1583,29 @@ Wire Wire Line
 	750  2900 900  2900
 Wire Wire Line
 	1300 2900 1750 2900
+Wire Wire Line
+	2600 4550 2600 4250
+Wire Wire Line
+	2600 4250 4000 4250
+Connection ~ 2600 4550
+Wire Wire Line
+	2400 4850 2600 4850
+Wire Wire Line
+	2600 4850 2800 4850
+Connection ~ 2600 4850
+Wire Wire Line
+	2400 3650 2600 3650
+Wire Wire Line
+	4000 3650 2600 3650
+Connection ~ 2600 3650
+Wire Wire Line
+	2400 3950 2600 3950
+Wire Wire Line
+	2900 3950 2600 3950
+Connection ~ 2600 3950
+Wire Wire Line
+	10450 1200 10450 1100
+Connection ~ 10450 1100
+Wire Wire Line
+	10450 1100 10750 1100
 $EndSCHEMATC
