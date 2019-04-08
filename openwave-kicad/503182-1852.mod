@@ -1,0 +1,176 @@
+PCBNEW-LibModule-V1  
+# encoding utf-8
+Units mm
+$INDEX
+MOLEX_503182-1852
+$EndINDEX
+$MODULE MOLEX_503182-1852
+Po 0 0 0 15 00000000 00000000 ~~
+Li MOLEX_503182-1852
+Cd 
+Sc 00000000
+At SMD
+Op 0 0 0
+.SolderMask 0
+.SolderPaste 0
+T0 -8.64903 4.21685 1.00162 1.00162 900 0.05 N V 21 "MOLEX_503182-1852"
+T1 8.63712 3.58418 1.00257 1.00257 900 0.05 N V 21 "VAL**"
+DP 0 0 0 0 4 0 26
+Dl 7.08472 1.775
+Dl 7.47 1.775
+Dl 7.47 4.18369
+Dl 7.08472 4.18369
+DP 0 0 0 0 4 0 24
+Dl -3.65928 -0.725
+Dl 5.55 -0.725
+Dl 5.55 2.68181
+Dl -3.65928 2.68181
+DP 0 0 0 0 4 0 24
+Dl -3.65585 -5.485
+Dl 5.55 -5.485
+Dl 5.55 -0.726161
+Dl -3.65585 -0.726161
+DP 0 0 0 0 4 0 24
+Dl -3.65772 -5.485
+Dl 5.55 -5.485
+Dl 5.55 -0.726534
+Dl -3.65772 -0.726534
+DP 0 0 0 0 4 0 24
+Dl -3.65471 -5.485
+Dl 5.55 -5.485
+Dl 5.55 -0.725935
+Dl -3.65471 -0.725935
+DS -7.07 -8.225 7.07 -8.225 0.127 27
+DS 7.07 -8.225 7.07 6.725 0.127 27
+DS 7.07 6.725 -7.07 6.725 0.127 27
+DS -7.07 6.725 -7.07 -8.225 0.127 27
+DS -8 7.25 8 7.25 0.05 26
+DS 8 7.25 8 -8.5 0.05 26
+DS 8 -8.5 -8 -8.5 0.05 26
+DS -8 -8.5 -8 7.25 0.05 26
+DS -7.07 -7.28 -7.07 -8.225 0.127 21
+DS -7.07 -8.225 7.07 -8.225 0.127 21
+DS 7.07 -8.225 7.07 -7.28 0.127 21
+DS -1.8 6.725 3.9 6.725 0.127 21
+DC -3.81 -8.89 -3.71 -8.89 0.2 21
+$PAD
+Sh "1" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.9 -6.355
+$EndPAD
+$PAD
+Sh "2" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.8 -6.355
+$EndPAD
+$PAD
+Sh "3" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -0.7 -6.355
+$EndPAD
+$PAD
+Sh "4" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 0.4 -6.355
+$EndPAD
+$PAD
+Sh "5" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.5 -6.355
+$EndPAD
+$PAD
+Sh "6" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 2.6 -6.355
+$EndPAD
+$PAD
+Sh "7" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 3.7 -6.355
+$EndPAD
+$PAD
+Sh "8" R 0.8 1.24 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 4.8 -6.355
+$EndPAD
+$PAD
+Sh "P1" R 0.95 2.5 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -7.245 -5.725
+$EndPAD
+$PAD
+Sh "P2" R 1.15 2.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 7.145 -5.875
+$EndPAD
+$PAD
+Sh "SW" R 1.16 1.25 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 6.74 -3.725
+$EndPAD
+$PAD
+Sh "DT" R 1.16 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 6.74 5.275
+$EndPAD
+$PAD
+Sh "P3" R 1.15 2.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -7.145 5.605
+$EndPAD
+$PAD
+Sh "P4" R 1.5 1.15 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.84 6.4
+$EndPAD
+$PAD
+Sh "P5" R 1.5 1.15 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 4.94 6.4
+$EndPAD
+$EndMODULE MOLEX_503182-1852
