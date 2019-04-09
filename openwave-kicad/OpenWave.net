@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/shane/Documents/ITsligo/ITsligo/year2/project_sem2/OpenWave/python_scripts/openwave-kicad/OpenWave.sch)
-    (date "Tue 09 Apr 2019 10:31:29 IST")
+    (date "Tue 09 Apr 2019 11:54:09 IST")
     (tool "Eeschema 5.0.2-5.fc29")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -93,7 +93,7 @@
       (tstamp 5AD658E8))
     (comp (ref J1)
       (value USB_OTG)
-      (footprint my_footprints:USB_Micro-B_Molex-105017-0001)
+      (footprint my_footprints:wurth_usb_connector)
       (libsource (lib Connector) (part USB_OTG) (description "USB mini/micro connector"))
       (sheetpath (names /) (tstamps /))
       (tstamp 5AD5E1AF))

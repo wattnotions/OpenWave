@@ -498,7 +498,7 @@ U 1 1 5AD5E1AF
 P 9150 2750
 F 0 "J1" H 8950 3200 50  0000 L CNN
 F 1 "USB_OTG" H 8950 3100 50  0000 L CNN
-F 2 "my_footprints:USB_Micro-B_Molex-105017-0001" H 9300 2700 50  0001 C CNN
+F 2 "my_footprints:wurth_usb_connector" H 9300 2700 50  0001 C CNN
 F 3 "" H 9300 2700 50  0001 C CNN
 	1    9150 2750
 	-1   0    0    1   

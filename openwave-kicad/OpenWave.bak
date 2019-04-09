@@ -1185,8 +1185,8 @@ $Comp
 L Connector:Conn_01x04_Female J4
 U 1 1 5CA9DB26
 P 5350 6950
-F 0 "J4" H 5377 6926 50  0000 L CNN
-F 1 "Conn_01x04_Female" H 5377 6835 50  0000 L CNN
+F 0 "J4" H 5300 6550 50  0000 L CNN
+F 1 "Conn_01x04_Female" H 4950 6650 50  0000 L CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 5350 6950 50  0001 C CNN
 F 3 "~" H 5350 6950 50  0001 C CNN
 	1    5350 6950
@@ -1457,9 +1457,9 @@ STM_RX2
 Text Label 6800 3650 0    50   ~ 0
 STM_TX2
 Text Label 4950 7150 2    50   ~ 0
-RX3
-Text Label 4950 7050 2    50   ~ 0
 TX3
+Text Label 4950 7050 2    50   ~ 0
+RX3
 Wire Wire Line
 	4950 7050 5150 7050
 Wire Wire Line
@@ -1608,4 +1608,12 @@ Wire Wire Line
 	10450 1100 10750 1100
 Wire Wire Line
 	3400 4650 4000 4650
+Text Notes 5400 7150 0    50   ~ 0
+BT_RX
+Text Notes 5400 7050 0    50   ~ 0
+BT_TX
+Text Notes 5400 6850 0    50   ~ 0
+BT_VCC
+Text Notes 5400 6950 0    50   ~ 0
+BT_GND
 $EndSCHEMATC
