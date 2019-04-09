@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 8)
+    (drawings 12)
     (tracks 428)
     (zones 0)
     (modules 51)
@@ -11,7 +11,7 @@
 
   (page A4)
   (layers
-    (0 F.Cu signal)
+    (0 F.Cu signal hide)
     (1 GND signal hide)
     (2 POWER signal hide)
     (31 B.Cu signal)
@@ -63,7 +63,7 @@
     (pad_to_mask_clearance 0.051)
     (solder_mask_min_width 0.25)
     (aux_axis_origin 0 0)
-    (visible_elements FFFFFFFF)
+    (visible_elements FFFEFBFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -2292,6 +2292,18 @@
     (pad 7 thru_hole circle (at -4.2 0.9) (size 2.8 2.8) (drill 2) (layers *.Cu *.Mask))
   )
 
+  (gr_text v0.1 (at 93.4 102.82) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.2)))
+  )
+  (gr_text OpenWave (at 93.66 100.17) (layer F.SilkS)
+    (effects (font (size 2.7 2.7) (thickness 0.3) italic))
+  )
+  (gr_text BOOT (at 103.01 80.03 90) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.2)))
+  )
+  (gr_text RST (at 102.78 68.53 90) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.2)))
+  )
   (gr_line (start 101 64) (end 67 64) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 104 101) (end 104 67) (angle 90) (layer Edge.Cuts) (width 0.15))
   (gr_line (start 67 104) (end 101 104) (angle 90) (layer Edge.Cuts) (width 0.15))
