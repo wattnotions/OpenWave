@@ -21,10 +21,10 @@ def get_csv_data():
 	z_accels   = []
 	pitch      = []
 	roll       = []
-	with open('test_data/20cm_datalog.csv', 'rU') as csvfile:
+	with open('datalog.csv', 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
-			row = row[:-1]
+			#row = row[:-1]
 			if row:
 				
 				timestamps.append (row[-1])
@@ -173,14 +173,16 @@ def detrend_data(dx_times, velocity, location):
 def find_peaks(data):
 	all_peaks=[]
 	thresh_peaks=[]
-	peaks1, properties1 = signal.find_peaks(np.negative(data))#, prominence=(None, 1)
+	#peaks1, properties1 = signal.find_peaks(np.negative(data))#, prominence=(None, 1)
 	peaks2, properties2 = signal.find_peaks(data)
 	
 	
-	for h in (peaks1):
-		all_peaks.append(h)
+	#for h in (peaks1):
+	#	all_peaks.append(h)
+	
 	for h in peaks2:
-		all_peaks.append(int(h))
+		if data[h]>2:
+			all_peaks.append(int(h))
 
 	thresh_peaks = sorted(all_peaks)
 	
@@ -237,13 +239,13 @@ def get_zero_crossings(filtered_z_axis):
 
 
 def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot and analyze
-	timestamps, z_accels = get_csv_data()[:2]
-	dx_times = format_millis_to_xaxis(timestamps, 1000)
-	filtered_z_axis = filter_accel_data(z_accels)
-	peaks = find_peaks(filtered_z_axis)
-	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), peaks)
-	chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
-	chunk_analyze(location_chunks)
+	timestamps, z_accels = get_csv_data()[:2]                     # get timestamps and z accel data from csv file
+	dx_times = format_millis_to_xaxis(timestamps, 1000)			  # format the timestamps into milliseconds and zero it	
+	filtered_z_axis = filter_accel_data(z_accels)                 # filter the z accel data
+	peaks = find_peaks(filtered_z_axis)							  # find the peaks	
+	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times,filtered_z_axis, peaks)  # take time and z axis data and peaks, cut data into chunks and integrate them seperately twice (to get velocity and location)
+	chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
+	chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
 
 def fft(displacement):
@@ -272,7 +274,9 @@ filtered_z_axis = filter_accel_data(z_accels)
 
 zero_crossings = get_zero_crossings(filtered_z_axis)
 
-location_chunks = chunk_integrate(dx_times, filtered_z_axis, zero_crossings)[1]
+velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings)
+
+chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 
 stitched_location = stitch_chunks(location_chunks)
 
