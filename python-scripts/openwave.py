@@ -183,9 +183,6 @@ def find_peaks(data):
 
 	thresh_peaks = sorted(all_peaks)
 	
-	print thresh_peaks
-	print len(data)
-	
 	for h in thresh_peaks:
 		plt.plot(h, data[h], "x")
 	print "hello"
