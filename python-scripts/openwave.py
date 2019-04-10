@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from scipy import signal
 import sys
 from numpy import median
-
+from scipy.fftpack import fft
+import matplotlib.ticker as plticker
 
 
 
@@ -81,8 +82,9 @@ def chunks(l, n):
 
 
 ### integrate the acceleration data in chunks ###
-def chunk_integrate(dx_times, filtered_z_axis, peaks):        
-	z_accels_chunks = []
+def chunk_integrate(dx_times, data, peaks):   
+	data = remove_dc_offset(data)     
+	data_chunks = []
 	x_axis_chunks   = []
 	zeroed_x_axis   = []
 	velocity_chunks  = []
@@ -90,22 +92,19 @@ def chunk_integrate(dx_times, filtered_z_axis, peaks):
 
 	len_array = len(peaks)
 	
-	print len (dx_times)
-	print len (filtered_z_axis)
-	
 	#use the peaks index numbers to split the z_accels and x_axis times into chunks
 	for idx in range(len_array-1):  
-		z_accels_chunks.append(filtered_z_axis[peaks[idx]:peaks[idx+1]])
+		data_chunks.append(data[peaks[idx]:peaks[idx+1]])
 		x_axis_chunks.append(dx_times[peaks[idx]:peaks[idx+1]])
 		
-	#double integrate each of the z_accel chunks to get velocity chunks
+	#double integrate each of the acceleration chunks to get velocity chunks
 	
 	for idx, h in enumerate(x_axis_chunks):
 		
-		velocity_chunks.append(it.cumtrapz(z_accels_chunks[idx],h))
+		velocity_chunks.append(it.cumtrapz(data_chunks[idx],h))
 		location_chunks.append(it.cumtrapz(remove_dc_offset(velocity_chunks[-1]),h[:-1]))
 		
-	return [velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks]
+	return [velocity_chunks, location_chunks, data, x_axis_chunks]
 
 def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks):	
 	
@@ -129,8 +128,8 @@ def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	plt.show()
 
 	
-def chunk_analyze(velocity_chunks, location_chunks):
-	stitched_location = []
+def chunk_analyze(chunks):
+	stitched_chunks = []
 	stitched_velocity = []
 	max_heights       = []
 	min_heights       = []
@@ -138,7 +137,7 @@ def chunk_analyze(velocity_chunks, location_chunks):
 	
 	
 	#check each chunk for the max displacement in that chunk
-	for h in location_chunks:
+	for h in chunks:
 		max_heights.append(float(max(h)))
 		min_heights.append(float(min(h)))
 		displacements.append(abs(max(h))+abs(min(h)))
@@ -147,6 +146,9 @@ def chunk_analyze(velocity_chunks, location_chunks):
 	avg_displacement =  sum(displacements) / float(len(displacements))
 	median_displacement =  median(displacements)
 	
+	for x in chunks:
+		stitched_chunks.extend(x)
+	
 	
 	print "Median Displacement = " + str(median_displacement) + " Meters"		
 	print "Average Chunk Displacement = " + str(avg_displacement) + " Meters"
@@ -154,38 +156,41 @@ def chunk_analyze(velocity_chunks, location_chunks):
 	
 	
 	
+def stitch_chunks(chunks):
+	stitched_chunks = []
+	for x in chunks:
+		stitched_chunks.extend(x)
+		
+	return stitched_chunks
+	
 def detrend_data(dx_times, velocity, location):
 	plt.plot(dx_times[:-1], signal.detrend(velocity), label='velocity',)
 	plt.legend()
 	plt.show()
 
 	
-def find_peaks(filtered_z_axis):
+def find_peaks(data):
 	all_peaks=[]
 	thresh_peaks=[]
-	peaks1, properties1 = signal.find_peaks(-filtered_z_axis)#, prominence=(None, 1)
-	#peaks2, properties2 = signal.find_peaks(filtered_z_axis)
+	peaks1, properties1 = signal.find_peaks(np.negative(data))#, prominence=(None, 1)
+	peaks2, properties2 = signal.find_peaks(data)
 	
 	
 	for h in (peaks1):
-		if h>2:
-			all_peaks.append(h)
-	#for h in peaks2:
-	#	all_peaks.append(h)
+		all_peaks.append(h)
+	for h in peaks2:
+		all_peaks.append(int(h))
 
 	thresh_peaks = sorted(all_peaks)
 	
-	#print properties["prominences"].max()
-	#plt.plot(-filtered_z_axis, label='filtered z-axis acceleration')
-	#thresh_peaks = []
-	#for x in peaks:
-	#	val = -filtered_z_axis[x]
-		#if  val > 0.4:
-	#	thresh_peaks.append(x)
-		
+	print thresh_peaks
+	print len(data)
 	
-	plt.plot(filtered_z_axis, label='filtered z-axis acceleration')
-	plt.plot(thresh_peaks, filtered_z_axis[thresh_peaks], "x")
+	for h in thresh_peaks:
+		plt.plot(h, data[h], "x")
+	print "hello"
+	plt.plot(data, label='filtered z-axis acceleration')
+	
 	plt.legend()
 	plt.show()
 	
@@ -224,10 +229,10 @@ def make_sine_wave():
 	f = 0.2
 	sample = 462
 	x = np.arange(sample)
-	y = (0.3*np.sin((2 * np.pi * f * x / Fs)))-0.3
+	y = (0.3*np.sin((2 * np.pi * f * x / Fs)))
 	return y
 	
-def get_zero_crossings():
+def get_zero_crossings(filtered_z_axis):
 	a = np.array(filtered_z_axis)
 	zero_crossings = np.where(np.diff(np.signbit(a)))[0]
 	return zero_crossings	
@@ -240,9 +245,47 @@ def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot an
 	peaks = find_peaks(filtered_z_axis)
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), peaks)
 	chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
-	chunk_analyze(velocity_chunks, location_chunks)
+	chunk_analyze(location_chunks)
+	
+
+def fft(displacement):
+	from scipy.fftpack import fft
+	# Number of sample points
+	N = len(displacement)
+	# sample spacing
+	
+	yf = fft(displacement)
+	print yf
+	
+	import matplotlib.pyplot as plt
+	plt.plot(2.0/N * np.abs(yf[0:N//2]))
+	plt.grid()
+	plt.show()
 
 
 
-time_to_get_chunky()
+
+timestamps, z_accels = get_csv_data()[:2]
+
+dx_times = format_millis_to_xaxis(timestamps, 1000)
+
+filtered_z_axis = filter_accel_data(z_accels)
+
+zero_crossings = get_zero_crossings(filtered_z_axis)
+
+location_chunks = chunk_integrate(dx_times, filtered_z_axis, zero_crossings)[1]
+
+stitched_location = stitch_chunks(location_chunks)
+
+new_displacement_chunks = []
+peaks = find_peaks(stitched_location)
+len_array = len(peaks)
+for idx in range(len_array-1):  
+		new_displacement_chunks.append(stitched_location[peaks[idx]:peaks[idx+1]])
+		
+
+chunk_analyze(new_displacement_chunks)
+
+
+
 
