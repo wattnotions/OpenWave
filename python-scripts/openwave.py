@@ -21,7 +21,7 @@ def get_csv_data():
 	z_accels   = []
 	pitch      = []
 	roll       = []
-	with open('datalog.csv', 'rU') as csvfile:
+	with open('test_data/40cm_4.5v.csv', 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
 			#row = row[:-1]
@@ -81,7 +81,7 @@ def chunks(l, n):
         yield l[i:i+n]
 
 
-### integrate the acceleration data in chunks ###
+### integrate the (acceleration) data in chunks ###
 def chunk_integrate(dx_times, zdata, peaks):   
 	data = remove_dc_offset(zdata)     
 	data_chunks = []
@@ -106,6 +106,9 @@ def chunk_integrate(dx_times, zdata, peaks):
 		
 	return [velocity_chunks, location_chunks, data_chunks, x_axis_chunks]
 
+
+# make a 3 in 1 plot with acceleration, velocity and displacement in chunk format
+
 def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks):	
 	
 	
@@ -117,7 +120,7 @@ def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	plt.subplot(3, 1, 2)
 	plt.ylabel('Velocity (m/s)')
 	for loc,x in zip(velocity_chunks, x_axis_chunks):
-		plt.plot(x[:len(loc)], remove_dc_offset(loc), "--")
+		plt.plot(x[:len(loc)], (loc), "--")
 		
 	plt.subplot(3, 1, 3)
 	plt.ylabel('Displacement (m)')
@@ -128,7 +131,9 @@ def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	plt.legend()
 	plt.show()
 
-	
+
+#look at chunks and determine median and average displacement
+
 def chunk_analyze(chunks):
 	stitched_chunks = []
 	stitched_velocity = []
@@ -147,15 +152,12 @@ def chunk_analyze(chunks):
 	avg_displacement =  sum(displacements) / float(len(displacements))
 	median_displacement =  median(displacements)
 	
-	for x in chunks:
-		stitched_chunks.extend(x)
-	
 	
 	print "Median Displacement = " + str(median_displacement) + " Meters"		
 	print "Average Chunk Displacement = " + str(avg_displacement) + " Meters"
 
 	
-	
+#take seperate chunks and combine into a single list
 	
 def stitch_chunks(chunks):
 	stitched_chunks = []
@@ -163,13 +165,16 @@ def stitch_chunks(chunks):
 		stitched_chunks.extend(x)
 		
 	return stitched_chunks
-	
+
+# take data with a linear offset and plot it with this offset removed
+
 def detrend_data(dx_times, velocity, location):
 	plt.plot(dx_times[:-1], signal.detrend(velocity), label='velocity',)
 	plt.legend()
 	plt.show()
 
-	
+
+# find peaks in a list and return the index numbers of the peaks
 def find_peaks(data):
 	all_peaks=[]
 	thresh_peaks=[]
@@ -181,7 +186,7 @@ def find_peaks(data):
 	#	all_peaks.append(h)
 	
 	for h in peaks2:
-		if data[h]>2:
+		if data[h]>0:
 			all_peaks.append(int(h))
 
 	thresh_peaks = sorted(all_peaks)
@@ -198,7 +203,7 @@ def find_peaks(data):
 		
 
 
-### plot the data ###
+### various plots, comment lines on/off as required ###
 
 def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 	#plt.plot(dx_times, z_accels, label='z-axis acceleration')
@@ -210,7 +215,10 @@ def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
 	plt.legend()
 	plt.show()
 
-def remove_dc_offset(data): # calculates average and removes any offset from dataset
+
+# remove a dc offset from dataset and return list with offset removed
+
+def remove_dc_offset(data): 
 	output = []
 	avg = sum(data) / len(data)
 	#print "average = " + str(avg)
@@ -223,7 +231,9 @@ def remove_dc_offset(data): # calculates average and removes any offset from dat
 	
 def pitch_roll_to_direction():
 	pass
-	
+
+# return a list with generic sine wave for testing
+
 def make_sine_wave():
 	Fs = 20
 	f = 0.2
@@ -232,13 +242,15 @@ def make_sine_wave():
 	y = (0.3*np.sin((2 * np.pi * f * x / Fs)))
 	return y
 	
+# find zero crossings in list and return their index numbers
+	
 def get_zero_crossings(filtered_z_axis):
 	a = np.array(filtered_z_axis)
 	zero_crossings = np.where(np.diff(np.signbit(a)))[0]
 	return zero_crossings	
 
-
-def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot and analyze
+# take accel data, chunk it, double integrate, plot and analyze
+def time_to_get_chunky():
 	timestamps, z_accels = get_csv_data()[:2]                     # get timestamps and z accel data from csv file
 	dx_times = format_millis_to_xaxis(timestamps, 1000)			  # format the timestamps into milliseconds and zero it	
 	filtered_z_axis = filter_accel_data(z_accels)                 # filter the z accel data
@@ -248,6 +260,7 @@ def time_to_get_chunky(): # take accel data, chunk it, double integrate, plot an
 	chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
 
+# perform an fft on input list and plot it
 def fft(displacement):
 	from scipy.fftpack import fft
 	# Number of sample points
@@ -279,6 +292,11 @@ velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integr
 chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 
 stitched_location = stitch_chunks(location_chunks)
+
+
+
+
+
 
 new_displacement_chunks = []
 peaks = find_peaks(stitched_location)
