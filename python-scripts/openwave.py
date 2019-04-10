@@ -82,8 +82,8 @@ def chunks(l, n):
 
 
 ### integrate the acceleration data in chunks ###
-def chunk_integrate(dx_times, data, peaks):   
-	data = remove_dc_offset(data)     
+def chunk_integrate(dx_times, zdata, peaks):   
+	data = remove_dc_offset(zdata)     
 	data_chunks = []
 	x_axis_chunks   = []
 	zeroed_x_axis   = []
@@ -104,9 +104,10 @@ def chunk_integrate(dx_times, data, peaks):
 		velocity_chunks.append(it.cumtrapz(data_chunks[idx],h))
 		location_chunks.append(it.cumtrapz(remove_dc_offset(velocity_chunks[-1]),h[:-1]))
 		
-	return [velocity_chunks, location_chunks, data, x_axis_chunks]
+	return [velocity_chunks, location_chunks, data_chunks, x_axis_chunks]
 
 def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks):	
+	
 	
 	plt.subplot(3, 1, 1)	
 	plt.ylabel('Acceleration (ms^-2)')
@@ -185,7 +186,7 @@ def find_peaks(data):
 	
 	for h in thresh_peaks:
 		plt.plot(h, data[h], "x")
-	print "hello"
+
 	plt.plot(data, label='filtered z-axis acceleration')
 	
 	plt.legend()
@@ -260,6 +261,7 @@ def fft(displacement):
 	plt.show()
 
 
+time_to_get_chunky()
 
 
 timestamps, z_accels = get_csv_data()[:2]
