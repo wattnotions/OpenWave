@@ -120,7 +120,7 @@ def chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	plt.subplot(3, 1, 2)
 	plt.ylabel('Velocity (m/s)')
 	for loc,x in zip(velocity_chunks, x_axis_chunks):
-		plt.plot(x[:len(loc)], (loc), "--")
+		plt.plot(x[:len(loc)], remove_dc_offset(loc), "--")
 		
 	plt.subplot(3, 1, 3)
 	plt.ylabel('Displacement (m)')
@@ -175,6 +175,7 @@ def detrend_data(dx_times, velocity, location):
 
 
 # find peaks in a list and return the index numbers of the peaks
+
 def find_peaks(data):
 	all_peaks=[]
 	thresh_peaks=[]
@@ -287,11 +288,13 @@ filtered_z_axis = filter_accel_data(z_accels)
 
 zero_crossings = get_zero_crossings(filtered_z_axis)
 
-velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings)
+velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::5])
 
 chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 
-stitched_location = stitch_chunks(location_chunks)
+chunk_analyze(location_chunks)
+
+stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
 
 
 
