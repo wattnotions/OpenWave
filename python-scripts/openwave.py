@@ -150,7 +150,7 @@ def chunk_analyze(chunks):
 	#print "Median Displacement = " + str(median_displacement) + " Meters"		
 	#print "Average Displacement = " + str(round(avg_displacement,4)) + " Meters"
 	
-	return str(round(avg_displacement*100,4))  ##convert to cm and round
+	return str(round(avg_displacement*100,2))  ##convert to cm and round
 	
 #take seperate chunks and combine into a single list
 	
@@ -293,16 +293,18 @@ def chunkify(dataset): #find peaks in dataset and break into chunks at those pea
 	
 def percent_error(actual, measured): #calculates percentage error between measured and actual value
 	diff = abs(measured - actual)
-	div   = diff/actual
-	return div*100
-	
-for h in os.listdir("test_data"):
-	if h == "data_readme.txt": continue
-	if "3v" in h            : continue
-	val = measure_displacement_peak_detect("test_data/"+h)
-	
-	print str(int(h[:2])*2) , val
+	div   = (diff/actual)*100
+	return str(round(div,2))
 	
 
+def make_error_measurements():
+	print "Actual(cm)" + "\t" + "Measured(cm)" + "\t" + "%Error"
+	for h in os.listdir("test_data"):
+		if h == "data_readme.txt": continue
+		val = float(measure_displacement_peak_detect("test_data/"+h))
+		actual_val = int(h[:2])*2
+		print "  "+str(actual_val)+"\t "+str(val)+"\t   "+percent_error(actual_val, val)+"%"
+	
+make_error_measurements()
 
 
