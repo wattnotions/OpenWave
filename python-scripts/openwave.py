@@ -8,7 +8,7 @@ import sys
 from numpy import median
 from scipy.fftpack import fft
 import matplotlib.ticker as plticker
-
+import os
 
 
 
@@ -16,12 +16,12 @@ import matplotlib.ticker as plticker
 ###csv format : (lin accel) X, Y, Z, (Euler) X, Y, Z, (MAG) X, Y , TIMESTAMP######
 
 
-def get_csv_data():
+def get_csv_data(filename):
 	timestamps = []
 	z_accels   = []
 	pitch      = []
 	roll       = []
-	with open('test_data/40cm_4.5v.csv', 'rU') as csvfile:
+	with open(filename, 'rU') as csvfile:
 		spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		for row in spamreader:
 			#row = row[:-1]
@@ -73,12 +73,6 @@ def double_integrate_data(z_accels, dx_times):
 
 
 
-### split a list into chunks of size n ###
-def chunks(l, n):
-    # For item i in a range that is a length of l,
-    for i in range(0, len(l), n):
-        # Create an index range for l of n items:
-        yield l[i:i+n]
 
 
 ### integrate the (acceleration) data in chunks ###
@@ -153,8 +147,8 @@ def chunk_analyze(chunks):
 	median_displacement =  median(displacements)
 	
 	
-	print "Median Displacement = " + str(median_displacement) + " Meters"		
-	print "Average Chunk Displacement = " + str(avg_displacement) + " Meters"
+	#print "Median Displacement = " + str(median_displacement) + " Meters"		
+	print "Average Displacement = " + str(round(avg_displacement,4)) + " Meters"
 
 	
 #take seperate chunks and combine into a single list
@@ -195,10 +189,10 @@ def find_peaks(data):
 	for h in thresh_peaks:
 		plt.plot(h, data[h], "x")
 
-	plt.plot(data, label='filtered z-axis acceleration')
+#	plt.plot(data, label='filtered z-axis acceleration')
 	
-	plt.legend()
-	plt.show()
+	#plt.legend()
+	#plt.show()
 	
 	return thresh_peaks  ##return all peaks above specified threshold
 		
@@ -251,15 +245,25 @@ def get_zero_crossings(filtered_z_axis):
 	return zero_crossings	
 
 # take accel data, chunk it, double integrate, plot and analyze
-def time_to_get_chunky():
-	timestamps, z_accels = get_csv_data()[:2]                     # get timestamps and z accel data from csv file
+def measure_displacement_peak_detect(filename):
+	timestamps, z_accels = get_csv_data(filename)[:2]                     # get timestamps and z accel data from csv file
 	dx_times = format_millis_to_xaxis(timestamps, 1000)			  # format the timestamps into milliseconds and zero it	
 	filtered_z_axis = filter_accel_data(z_accels)                 # filter the z accel data
 	peaks = find_peaks(filtered_z_axis)							  # find the peaks	
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times,filtered_z_axis, peaks)  # take time and z axis data and peaks, cut data into chunks and integrate them seperately twice (to get velocity and location)
-	chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
+	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
 	chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
+	
+def measure_displacement_zero_crossings(filename):
+	timestamps, z_accels = get_csv_data(filename)[:2]
+	dx_times = format_millis_to_xaxis(timestamps, 1000)
+	filtered_z_axis = filter_accel_data(z_accels)
+	zero_crossings = get_zero_crossings(filtered_z_axis)
+	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::3])
+	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
+	chunk_analyze(location_chunks)
+	stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
 
 # perform an fft on input list and plot it
 def fft(displacement):
@@ -277,39 +281,21 @@ def fft(displacement):
 	plt.show()
 
 
-time_to_get_chunky()
-
-
-timestamps, z_accels = get_csv_data()[:2]
-
-dx_times = format_millis_to_xaxis(timestamps, 1000)
-
-filtered_z_axis = filter_accel_data(z_accels)
-
-zero_crossings = get_zero_crossings(filtered_z_axis)
-
-velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::5])
-
-chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
-
-chunk_analyze(location_chunks)
-
-stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
-
-
-
-
-
-
-new_displacement_chunks = []
-peaks = find_peaks(stitched_location)
-len_array = len(peaks)
-for idx in range(len_array-1):  
-		new_displacement_chunks.append(stitched_location[peaks[idx]:peaks[idx+1]])
+def chunkify(dataset): #find peaks in dataset and break into chunks at those peaks
+	new_chunks = []
+	peaks = find_peaks(dataset)
+	len_array = len(peaks)
+	for idx in range(len_array-1):  
+			new_displacement_chunks.append(dataset[peaks[idx]:peaks[idx+1]])
 		
+	return new_displacement_chunks
 
-chunk_analyze(new_displacement_chunks)
-
+	
+for h in os.listdir("test_data"):
+	if h == "data_readme.txt": continue
+	if "3v" in h            : continue
+	measure_displacement_peak_detect("test_data/"+h)
+	
 
 
 
