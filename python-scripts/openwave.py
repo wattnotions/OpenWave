@@ -10,7 +10,7 @@ from scipy.fftpack import fft
 import matplotlib.ticker as plticker
 import os
 from prettytable import PrettyTable
-
+import random
 
 ### open csv file and get required parameters ###
 ###csv format : (lin accel) X, Y, Z, (Euler) X, Y, Z, (MAG) X, Y , TIMESTAMP######
@@ -246,23 +246,23 @@ def get_zero_crossings(filtered_z_axis):
 	return zero_crossings	
 
 # take accel data, chunk it, double integrate, plot and analyze
-def measure_displacement_peak_detect(filename):
+def measure_displacement_peak_detect(filename, plot='no'):
 	timestamps, z_accels = get_csv_data(filename)[:2]                     # get timestamps and z accel data from csv file
 	dx_times = format_millis_to_xaxis(timestamps, 1000)			  # format the timestamps into milliseconds and zero it	
 	filtered_z_axis = filter_accel_data(z_accels)                 # filter the z accel data
 	peaks = find_peaks(filtered_z_axis)							  # find the peaks	
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times,filtered_z_axis, peaks)  # take time and z axis data and peaks, cut data into chunks and integrate them seperately twice (to get velocity and location)
-	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
+	if plot == 'yes':chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
 	return chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
 	
-def measure_displacement_zero_crossings(filename):
+def measure_displacement_zero_crossings(filename, plot='no'):
 	timestamps, z_accels = get_csv_data(filename)[:2]
 	dx_times = format_millis_to_xaxis(timestamps, 1000)
 	filtered_z_axis = filter_accel_data(z_accels)
 	zero_crossings = get_zero_crossings(filtered_z_axis)
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::3])
-	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
+	if plot == 'yes':chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	return chunk_analyze(location_chunks)
 	#stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
 
@@ -281,8 +281,8 @@ def fft(displacement):
 	plt.grid()
 	plt.show()
 
-
-def chunkify(dataset): #find peaks in dataset and break into chunks at those peaks
+#find peaks in dataset and break into chunks at those peaks
+def chunkify(dataset): 
 	new_chunks = []
 	peaks = find_peaks(dataset)
 	len_array = len(peaks)
@@ -290,13 +290,14 @@ def chunkify(dataset): #find peaks in dataset and break into chunks at those pea
 			new_displacement_chunks.append(dataset[peaks[idx]:peaks[idx+1]])
 		
 	return new_displacement_chunks
-	
-def percent_error(actual, measured): #calculates percentage error between measured and actual value
+
+#calculates percentage error between measured and actual value	
+def percent_error(actual, measured): 
 	diff = abs(measured - actual)
 	div   = (diff/actual)*100
 	return str(round(div,2))
 	
-
+# iterates thorugh all example data files and calculates % error
 def make_error_measurements():
 	t = PrettyTable(['Actual (cm)', 'Measured(cm)', '% Error', 'Motor Voltage (V)'])
 	for h in os.listdir("test_data"):
@@ -306,7 +307,14 @@ def make_error_measurements():
 		speed_val = h.split('_')[1].split('v')[0]
 		t.add_row([str(actual_val), str(val), percent_error(actual_val, val), speed_val])
 	print t
-	
-make_error_measurements()
 
 
+try:
+	if   sys.argv[1] == "error":
+		make_error_measurements()
+	elif sys.argv[1] == 'peak':
+		measure_displacement_peak_detect(filename='test_data/'+(os.listdir('test_data'))[random.randint(0,4)], plot='yes')
+	elif sys.argv[1] == 'zero':
+		measure_displacement_zero_crossings(filename='test_data/'+(os.listdir('test_data'))[random.randint(0,4)], plot='yes')
+except IndexError:
+	print "Pass argument 'error' for error measurments, 'peak' for displacement using peak detection, or 'zero' for peak detection using zero crossings"
