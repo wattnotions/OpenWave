@@ -9,7 +9,7 @@ from numpy import median
 from scipy.fftpack import fft
 import matplotlib.ticker as plticker
 import os
-
+from prettytable import PrettyTable
 
 
 ### open csv file and get required parameters ###
@@ -298,12 +298,14 @@ def percent_error(actual, measured): #calculates percentage error between measur
 	
 
 def make_error_measurements():
-	print "Actual(cm)" + "\t" + "Measured(cm)" + "\t" + "%Error"
+	t = PrettyTable(['Actual (cm)', 'Measured(cm)', '% Error', 'Motor Voltage (V)'])
 	for h in os.listdir("test_data"):
 		if h == "data_readme.txt": continue
 		val = float(measure_displacement_peak_detect("test_data/"+h))
 		actual_val = int(h[:2])*2
-		print "  "+str(actual_val)+"\t "+str(val)+"\t   "+percent_error(actual_val, val)+"%"
+		speed_val = h.split('_')[1].split('v')[0]
+		t.add_row([str(actual_val), str(val), percent_error(actual_val, val), speed_val])
+	print t
 	
 make_error_measurements()
 
