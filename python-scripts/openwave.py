@@ -148,8 +148,9 @@ def chunk_analyze(chunks):
 	
 	
 	#print "Median Displacement = " + str(median_displacement) + " Meters"		
-	print "Average Displacement = " + str(round(avg_displacement,4)) + " Meters"
-
+	#print "Average Displacement = " + str(round(avg_displacement,4)) + " Meters"
+	
+	return str(round(avg_displacement*100,4))  ##convert to cm and round
 	
 #take seperate chunks and combine into a single list
 	
@@ -252,7 +253,7 @@ def measure_displacement_peak_detect(filename):
 	peaks = find_peaks(filtered_z_axis)							  # find the peaks	
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times,filtered_z_axis, peaks)  # take time and z axis data and peaks, cut data into chunks and integrate them seperately twice (to get velocity and location)
 	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
-	chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
+	return chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
 	
 def measure_displacement_zero_crossings(filename):
@@ -262,8 +263,8 @@ def measure_displacement_zero_crossings(filename):
 	zero_crossings = get_zero_crossings(filtered_z_axis)
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::3])
 	#chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
-	chunk_analyze(location_chunks)
-	stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
+	return chunk_analyze(location_chunks)
+	#stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
 
 # perform an fft on input list and plot it
 def fft(displacement):
@@ -289,12 +290,18 @@ def chunkify(dataset): #find peaks in dataset and break into chunks at those pea
 			new_displacement_chunks.append(dataset[peaks[idx]:peaks[idx+1]])
 		
 	return new_displacement_chunks
-
+	
+def percent_error(actual, measured): #calculates percentage error between measured and actual value
+	diff = abs(measured - actual)
+	div   = diff/actual
+	return div*100
 	
 for h in os.listdir("test_data"):
 	if h == "data_readme.txt": continue
 	if "3v" in h            : continue
-	measure_displacement_peak_detect("test_data/"+h)
+	val = measure_displacement_peak_detect("test_data/"+h)
+	
+	print str(int(h[:2])*2) , val
 	
 
 
