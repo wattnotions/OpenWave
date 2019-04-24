@@ -11,6 +11,7 @@ import matplotlib.ticker as plticker
 import os
 from prettytable import PrettyTable
 import random
+from scipy.signal import butter, lfilter, freqz
 
 ### open csv file and get required parameters ###
 ###csv format : (lin accel) X, Y, Z, (Euler) X, Y, Z, (MAG) X, Y , TIMESTAMP######
@@ -56,10 +57,11 @@ def format_millis_to_xaxis(timestamps, scale_factor):
 ### filter the acceleration data ###
 def filter_accel_data(z_accels):
 	fs = 19.23
-	fc = 0.7  # Cut-off frequency of the filter (was 2)
+	fc = 1  # Cut-off frequency of the filter (was 2)
 	w = float(fc / (fs / 2)) # Normalize the frequency
 	b, a = signal.butter(5, w, 'low')
 	filtered_z_axis = signal.filtfilt(b, a, z_accels)
+	
 	return filtered_z_axis
 	
 	
@@ -188,12 +190,14 @@ def find_peaks(data):
 	thresh_peaks = sorted(all_peaks)
 	
 	for h in thresh_peaks:
-		plt.plot(h, data[h], "x")
+		plt.plot(h, data[h], "x", color="black", markersize=12)
 
-#	plt.plot(data, label='filtered z-axis acceleration')
+	plt.plot(data, label='filtered z-axis acceleration',color="red")
+	plt.ylabel('Acceleration ($ms^{2}$)')
+	plt.xlabel('Sample Number')
 	
-	#plt.legend()
-	#plt.show()
+	plt.legend()
+	plt.show()
 	
 	return thresh_peaks  ##return all peaks above specified threshold
 		
@@ -201,12 +205,14 @@ def find_peaks(data):
 
 ### various plots, comment lines on/off as required ###
 
-def plot_data(z_accels, filtered_z_axis, velocity, location, dx_times):
-	#plt.plot(dx_times, z_accels, label='z-axis acceleration')
-	plt.plot(dx_times, filtered_z_axis, label='filtered z-axis acceleration')
+def plot_data(z_accels, filtered_z_axis, velocity, location,stitched_location, dx_times):
+#	plt.plot(dx_times, z_accels, label='z-axis acceleration')
+#	plt.plot(dx_times, filtered_z_axis,color="red", label='filtered z-axis acceleration')
 	#plt.plot(dx_times[:-1], velocity, label='z-axis velocity')
 	#plt.plot(dx_times[:-2], location, label='location')
-	plt.ylabel('Acceleration ($ms^{2}$)')
+	plt.plot(dx_times[:len(stitched_location)], stitched_location,color="purple")
+	#plt.ylabel('Acceleration ($ms^{2}$)')
+	plt.ylabel('Vertical Displacement (m)')
 	plt.xlabel('Time (Seconds)')
 	plt.legend()
 	plt.show()
@@ -247,12 +253,17 @@ def get_zero_crossings(filtered_z_axis):
 
 # take accel data, chunk it, double integrate, plot and analyze
 def measure_displacement_peak_detect(filename, plot='no'):
+	
 	timestamps, z_accels = get_csv_data(filename)[:2]                     # get timestamps and z accel data from csv file
 	dx_times = format_millis_to_xaxis(timestamps, 1000)			  # format the timestamps into milliseconds and zero it	
 	filtered_z_axis = filter_accel_data(z_accels)                 # filter the z accel data
 	peaks = find_peaks(filtered_z_axis)							  # find the peaks	
 	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times,filtered_z_axis, peaks)  # take time and z axis data and peaks, cut data into chunks and integrate them seperately twice (to get velocity and location)
-	if plot == 'yes':chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
+	stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
+	if plot == 'yes':
+		plot_data(z_accels, filtered_z_axis, velocity_chunks, location_chunks,stitched_location, dx_times)
+		chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks) #make a 3 in 1 plot with acceleration, velocity and displacement
+	
 	return chunk_analyze(location_chunks)								  # look at each of the location chunks for max displacement etc.
 	
 	
@@ -261,8 +272,10 @@ def measure_displacement_zero_crossings(filename, plot='no'):
 	dx_times = format_millis_to_xaxis(timestamps, 1000)
 	filtered_z_axis = filter_accel_data(z_accels)
 	zero_crossings = get_zero_crossings(filtered_z_axis)
-	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::3])
-	if plot == 'yes':chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
+	velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks  = chunk_integrate(dx_times, remove_dc_offset(filtered_z_axis), zero_crossings[::4])
+	if plot == 'yes':
+		plot_data(z_accels, filtered_z_axis, velocity_chunks, location_chunks, dx_times)
+		chunk_plot(velocity_chunks, location_chunks, z_accels_chunks, x_axis_chunks)
 	return chunk_analyze(location_chunks)
 	#stitched_location = remove_dc_offset(stitch_chunks(location_chunks))
 
@@ -280,6 +293,17 @@ def fft(displacement):
 	plt.plot(2.0/N * np.abs(yf[0:N//2]))
 	plt.grid()
 	plt.show()
+	
+def butter_lowpass(cutoff, fs, order=5):
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff / nyq
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    return b, a
+    
+def butter_lowpass_filter(data, cutoff, fs, order=5):
+    b, a = butter_lowpass(cutoff, fs, order=order)
+    y = lfilter(b, a, data)
+    return y
 
 #find peaks in dataset and break into chunks at those peaks
 def chunkify(dataset): 
@@ -290,6 +314,15 @@ def chunkify(dataset):
 			new_displacement_chunks.append(dataset[peaks[idx]:peaks[idx+1]])
 		
 	return new_displacement_chunks
+	
+def find_frequency_from_indexes(index_list): #take indexes like zero crossing or peaks and count the difference to get frequency
+	array_length = len(index_list)
+	dx_vals = []
+	for idx in range(array_length-1):
+		dx_vals.append = index_list[idx+1] - index_list[idx]
+		
+	for h in dx_vals:
+		print h
 
 #calculates percentage error between measured and actual value	
 def percent_error(actual, measured): 
@@ -301,8 +334,10 @@ def percent_error(actual, measured):
 def make_error_measurements():
 	t = PrettyTable(['Actual (cm)', 'Measured(cm)', '% Error', 'Motor Voltage (V)'])
 	for h in os.listdir("test_data"):
+		print "filename : " + h
 		if h == "data_readme.txt": continue
-		val = float(measure_displacement_peak_detect("test_data/"+h))
+		val= float(measure_displacement_peak_detect("test_data/"+h))
+		
 		actual_val = int(h[:2])*2
 		speed_val = h.split('_')[1].split('v')[0]
 		t.add_row([str(actual_val), str(val), percent_error(actual_val, val), speed_val])
@@ -313,8 +348,30 @@ try:
 	if   sys.argv[1] == "error":
 		make_error_measurements()
 	elif sys.argv[1] == 'peak':
-		measure_displacement_peak_detect(filename='test_data/'+(os.listdir('test_data'))[random.randint(0,4)], plot='yes')
+		measure_displacement_peak_detect(filename='test_data/'+ sys.argv[2], plot='yes')
 	elif sys.argv[1] == 'zero':
-		measure_displacement_zero_crossings(filename='test_data/'+(os.listdir('test_data'))[random.randint(0,4)], plot='yes')
+		measure_displacement_zero_crossings(filename='test_data/'+sys.argv[2], plot='yes')
 except IndexError:
+	order = 6
+	fs = 20       # sample rate, Hz
+	cutoff = 9.9  # desired cutoff frequency of the filter, Hz
+
+	# Get the filter coefficients so we can check its frequency response.
+	b, a = butter_lowpass(cutoff, fs, order)
+
+	# Plot the frequency response.
+	w, h = freqz(b, a, worN=8000)
+	
+	plt.plot(0.5*fs*w/np.pi, np.abs(h), 'b')
+	plt.plot(cutoff, 0.5*np.sqrt(2), 'ko')
+	plt.axvline(cutoff, color='k')
+	plt.xlim(0, 0.5*fs)
+	plt.title("Lowpass Filter Frequency Response")
+	plt.xlabel('Frequency [Hz]')
+	plt.ylabel('Gain')
+	plt.grid()
+	plt.show()
 	print "Pass argument 'error' for error measurments, 'peak' for displacement using peak detection, or 'zero' for peak detection using zero crossings"
+
+
+
