@@ -1,6 +1,6 @@
-function y = sineGen(amplitude, freq, phase, stoptime)
+function y = sineGen(amplitude, freq, phase, stoptime, fs)
 
-    fs = 2048; % Sampling frequency (samples per second) 
+    
     dt = 1/fs; % seconds per sample 
     t = (0:dt:stoptime)'; % seconds 
     F = freq; % Sine wave frequency (hertz)
