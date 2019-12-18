@@ -1,4 +1,4 @@
-num_waves = 100; %Number of sine waves to create and add together
+num_waves = 1; %Number of sine waves to create and add together
 
 %Generate wave amplitudes based on normal distribution
 r = normrnd(0,10,[1,num_waves]); %Generate random numbers
@@ -21,13 +21,13 @@ phases=min_phase+rand(1,n)*(max_phase-min_phase);
 
 
 
-fs = 160;         %sampling frequency in hz
-stoptime = 100; %sample length in seconds
+fs = 2;         %sampling frequency in hz
+stoptime = 1000; %sample length in seconds
 
-waves = zeros(100, (fs*stoptime)+1);  %define matrix to store sine wave vectors in
+waves = zeros(num_waves, (fs*stoptime)+1);  %define matrix to store sine wave vectors in
 
-for i = 1:100 
-   waves(i,:) = sineGen(amps(i), freqs(i), phases(i), 100, fs);
+for i = 1:num_waves 
+   waves(i,:) = sineGen(amps(i), freqs(i), phases(i), stoptime, fs);
 end
 
 
