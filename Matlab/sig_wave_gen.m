@@ -9,18 +9,18 @@ std(amps)
 min_freq=0.05;
 max_freq=0.67;
 n=100;
-freqs=min_freq+rand(1,n)*(max_freq-min_freq)
+freqs=min_freq+rand(1,n)*(max_freq-min_freq);
 
 %Generate random phase shifts
 min_phase=0;
 max_phase=180;
 n=100;
-phases=min_phase+rand(1,n)*(max_phase-min_phase)
+phases=min_phase+rand(1,n)*(max_phase-min_phase);
 
-
+waves = zeros(100, 204801);
 
 for i = 1:100 
-   waves = sineGen(amps(i), freqs(i), phases(i), 100)];
+   waves(i,:) = sineGen(amps(i), freqs(i), phases(i), 100);
 end
 
 
