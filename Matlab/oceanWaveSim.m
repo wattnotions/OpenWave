@@ -30,12 +30,13 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
 
     waves = zeros(num_waves, num_samples);  %define matrix to store sine wave vectors in
 
+    %generate sine waves and append to waves matrix
     for i = 1:num_waves 
        waves(i,:) = sineGen(amps(i), freqs(i), phases(i), stoptime, fs);
     end
 
+    %add all of the generated waves together
     sim_wave = zeros(1,num_samples);
-
     for i = 1:num_waves
         sim_wave = sim_wave + waves(i,:);
     end
