@@ -1,12 +1,14 @@
 function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
 
-    num_waves = 10; %Number of sine waves to create and add together
+   
 
     %Generate wave amplitudes based on normal distribution
     r = normrnd(0,1,[1,num_waves]); %Generate random numbers
     amps = r + abs(min(r));        %shift values to positive numbers
-
-    %histogram(amps, 100);
+    
+    figure(1)
+   % histogram(amps, 100);
+    grid
 
 
 
@@ -15,6 +17,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
     max_freq=0.67;
     n=num_waves;
     freqs=min_freq+rand(1,n)*(max_freq-min_freq);
+    histogram(freqs, 100);
 
     %Generate random phase shifts
     min_phase=0;
@@ -24,7 +27,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
 
 
 
-    fs = 200;         %sampling frequency in hz
+    fs = 4;         %sampling frequency in hz
     stoptime = 50; %sample length in seconds
     num_samples =  (fs*stoptime)+1;
 
