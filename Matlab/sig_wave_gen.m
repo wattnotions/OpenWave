@@ -1,11 +1,11 @@
-num_waves = 1000; %Number of sine waves to create and add together
+num_waves = 100; %Number of sine waves to create and add together
 
 %Generate wave amplitudes based on normal distribution
-r = normrnd(0,5,[1,num_waves]); %Generate random numbers
+r = normrnd(0,1,[1,num_waves]); %Generate random numbers
 amps = r + abs(min(r));        %shift values to positive numbers
 
-histogram(amps, 100);
-std(amps)
+%histogram(amps, 100);
+
 
 
 %Generate random frequencies between 0.05-0.67Hz
@@ -38,7 +38,10 @@ for i = 1:num_waves
     sim_wave = sim_wave + waves(i,:);
 end
 
-std(amps)
-std(sim_wave)
-%plot(sim_wave)
+
+std(sim_wave);
+fprintf('Simulated wave std deviation = %f\n',std(sim_wave));
+fprintf('Simulated wave sig wave height = %f\n',4*std(sim_wave));
+plot(sim_wave)
+
 
