@@ -1,4 +1,4 @@
-function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
+function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
 
    
 
@@ -27,8 +27,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
 
 
 
-    fs = 4;         %sampling frequency in hz
-    stoptime = 50; %sample length in seconds
+  
     num_samples =  (fs*stoptime)+1;
 
     waves = zeros(num_waves, num_samples);  %define matrix to store sine wave vectors in
@@ -49,9 +48,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev)
     fprintf('Simulated wave std deviation = %f\n',std(sim_wave));
     fprintf('Simulated wave sig wave height (4*std_dev) = %f\n',4*std(sim_wave));
     
-    h = sort(amps');
-    h_sig = h(round(num_waves*0.67):num_waves,1);
-    fprintf('Simulated wave sig wave height (highest 3rd) = %f\n',mean(h_sig));
+   
 
     %plot(sim_wave)
     
