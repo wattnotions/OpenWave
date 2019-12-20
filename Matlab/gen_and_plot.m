@@ -17,6 +17,7 @@ fprintf('Simulated wave sig wave height (highest 3rd) = %f\n',sig_wave_height);
 percent_diff = ((sig_wave_std_dev - sig_wave_height) / sig_wave_height)*100;
 fprintf('Percent difference = %f\n', percent_diff);
 
+
+plot(t,S);
 yline(sig_wave_height/2,'--g','Hightest 3rd Calc');
 yline((4*std(S))/2,'b','4*std Calc');
-
