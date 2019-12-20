@@ -44,14 +44,6 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
     end
 
 
-   
-    %fprintf('Simulated wave std deviation = %f\n',std(sim_wave));
-    fprintf('Simulated wave sig wave height (4*std_dev) = %f\n',4*std(sim_wave));
-    
-   
-
-    %plot(sim_wave)
-    
 end
 
 
