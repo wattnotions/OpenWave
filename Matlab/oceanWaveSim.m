@@ -6,9 +6,9 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
     r = normrnd(0,1,[1,num_waves]); %Generate random numbers
     amps = r + abs(min(r));        %shift values to positive numbers
     
-    figure(1)
-   % histogram(amps, 100);
-    grid
+    %figure(1)
+    %histogram(amps, 100);
+    %grid
 
 
 
@@ -17,7 +17,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
     max_freq=0.67;
     n=num_waves;
     freqs=min_freq+rand(1,n)*(max_freq-min_freq);
-    histogram(freqs, 100);
+    %histogram(freqs, 100);
 
     %Generate random phase shifts
     min_phase=0;
@@ -45,7 +45,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
 
 
    
-    fprintf('Simulated wave std deviation = %f\n',std(sim_wave));
+    %fprintf('Simulated wave std deviation = %f\n',std(sim_wave));
     fprintf('Simulated wave sig wave height (4*std_dev) = %f\n',4*std(sim_wave));
     
    
