@@ -15,6 +15,7 @@ t = (0:dt:stoptime)'; % seconds
 plot(t,S);
 
 sig_wave_height = sigWaveCalc(S);
+fprintf('Simulated wave sig wave height (4*std_dev) = %f\n',4*std(sim_wave));
 fprintf('Simulated wave sig wave height (highest 3rd) = %f\n',sig_wave_height);
 
 yline(sig_wave_height/2,'--g','Hightest 3rd Calc');
