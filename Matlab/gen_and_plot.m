@@ -1,5 +1,5 @@
 num_waves = 10000;
-fs = 4;
+fs = 300;
 dt=1/fs;
 stoptime = 60;
 sample_length = (fs*stoptime)+1;
@@ -19,5 +19,9 @@ fprintf('Percent difference = %f\n', percent_diff);
 
 
 plot(t,S);
+title('Plot of ocean surface elevation')
+xlabel('Time (Seconds)')
+ylabel('Elevation (cm)')
 yline(sig_wave_height/2,'--g','Hightest 3rd Calc');
 yline((4*std(S))/2,'b','4*std Calc');
+
