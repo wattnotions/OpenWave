@@ -22,14 +22,6 @@ top_third_index = round( length(wave_heights)*0.67);
 sig_wave_height = mean(wave_heights(top_third_index:length(wave_heights)));
 
 
-
-
-    
-
-
-
-
-
 % Visualize results
 %{
 clf
