@@ -1,3 +1,11 @@
+%{
+Generates simulated ocean wave surface elavation data
+Calculates significant wave height of this data using two seperate methods,
+Highest 3rd of waves and then 4*Significant Deviation of surface elavation,
+It then plots the wave data with these two measurements overlayed
+%}
+
+
 num_waves = 10000;
 fs = 4;
 dt=1/fs;
@@ -6,8 +14,6 @@ sample_length = (fs*stoptime)+1;
 t = (0:dt:stoptime)'; % seconds 
 
 S = oceanWaveSim(num_waves, 1, fs, stoptime);
-%plotFFT(fs, sample_length, S);
-
 
 sig_wave_height = sigWaveCalc(S);
 sig_wave_std_dev = 4*std(S);
