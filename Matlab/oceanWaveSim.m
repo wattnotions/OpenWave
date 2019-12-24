@@ -17,7 +17,8 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
     max_freq=0.67;
     n=num_waves;
     freqs=min_freq+rand(1,n)*(max_freq-min_freq);
-    %histogram(freqs, 100);
+    figure(9)
+    histogram(freqs, 30);
 
     %Generate random phase shifts
     min_phase=0;
@@ -34,6 +35,7 @@ function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
 
     %generate sine waves and append to waves matrix
     for i = 1:num_waves 
+       %fprintf('Amplitude :%0.2f   , Freq : %0.2f, Period : %0.2f, Phase: %0.2f\n',amps(i), freqs(i), 1/freqs(i), phases(i));
        waves(i,:) = sineGen(amps(i), freqs(i), phases(i), stoptime, fs);
     end
 
