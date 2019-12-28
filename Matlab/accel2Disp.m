@@ -5,15 +5,19 @@ function displacement = accel2Disp(accel, fs)
     stoptime = (length(accel)-1)/fs;
     t = (0:dt:stoptime)'; % seconds 
     
+    accel = accel-mean(accel);
     
-    velocity = cumtrapz(accel);
-    displacement = cumtrapz(accel);
+    velocity = cumtrapz(t,accel);
+    velocity = velocity-mean(velocity)
+    
+    
+    displacement = cumtrapz(t,velocity);
     
     hold off
     figure(2)
     
     
-    h = tiledlayout(3,1)
+    h = tiledlayout(3,1);
     
     nexttile
     plot(t, accel,'b')

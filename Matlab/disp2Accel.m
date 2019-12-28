@@ -14,7 +14,7 @@ function accel = disp2Accel(displacement, fs)
     
 
     
-    h = tiledlayout(3,1)
+    h = tiledlayout(3,1);
     nexttile
     plot(t,displacement,'g')
     title('Displacement')
