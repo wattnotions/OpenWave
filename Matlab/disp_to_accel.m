@@ -1,7 +1,7 @@
 num_waves = 30;
 fs = 40;
 dt=1/fs;
-stoptime = 20;
+stoptime = 200;
 sample_length = (fs*stoptime)+1;
 
 t = (0:dt:stoptime)'; % seconds 
@@ -19,4 +19,4 @@ hold on
 plot(t, S);
 legend('Derived displacement','Original Data');
 title('Output displacement')
-xtitle('Time (Seconds)')
+xlabel('Time (Seconds)')
