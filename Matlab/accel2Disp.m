@@ -1,17 +1,20 @@
-function displacement = accel2Disp(accel, fs)
+function displacement = accel2Disp(accel, fs,t)
 
     
     dt=1/fs;
     stoptime = (length(accel)-1)/fs;
-    t = (0:dt:stoptime)'; % seconds 
+   % t = (0:dt:stoptime)'; % seconds 
     
     accel = accel-mean(accel);
+    accel = detrend(accel);
     
     velocity = cumtrapz(t,accel);
     velocity = velocity-mean(velocity);
+    velocity = detrend(velocity, 2);
     
     
     displacement = cumtrapz(t,velocity);
+   
     
     hold off
     figure(2005)
