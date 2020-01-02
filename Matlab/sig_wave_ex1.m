@@ -13,7 +13,7 @@ stoptime = 60;
 sample_length = (fs*stoptime)+1;
 t = (0:dt:stoptime)'; % seconds 
 
-S = oceanWaveSim(num_waves, 0.1, fs, stoptime);
+S = oceanWaveSim(num_waves, 0.01, fs, stoptime);
 
 sig_wave_height = sigWaveCalc(S);
 sig_wave_std_dev = 4*std(S);
@@ -28,5 +28,7 @@ figure(1)
 plot(t,S);
 yline(sig_wave_height/2,'--g','Hightest 3rd Calc');
 yline((4*std(S))/2,'b','4*std Calc');
+xlabel('Time (Seconds)')
+ylabel('Surface Displacement (Metres)')
 
 
