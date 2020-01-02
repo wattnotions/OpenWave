@@ -1,24 +1,20 @@
-function sim_wave = oceanWaveSim(num_waves, amp_std_dev, fs, stoptime)
+function sim_wave = oceanWaveSim(num_waves, amp_scale, fs, stoptime)
 
+    y = randraw('rayl', 1, 1e6 );
+    h = histogram(y);
    
+    h.NumBins = num_waves;
 
-    %Generate wave amplitudes based on normal distribution
-    r = normrnd(0,1,[1,num_waves]); %Generate random numbers
-    amps = r + abs(min(r));        %shift values to positive numbers
-    
-    %figure(1)
-    %histogram(amps, 100);
-    %grid
+    freq_min = 0.05;
+    freq_max = 0.67;
+    freq_range = freq_max-freq_min;
 
+    freq_bin_width = freq_range/h.NumBins
+    freqs          = (freq_min:freq_bin_width:freq_max)';
 
-
-    %Generate random frequencies between 0.05-0.67Hz
-    min_freq=0.05;
-    max_freq=0.67;
-    n=num_waves;
-    freqs=min_freq+rand(1,n)*(max_freq-min_freq);
-    figure(9)
-    histogram(freqs, 30);
+    amps = h.Values()';
+    amps = amps/max(amps);
+    amps = amps*amp_scale;
 
     %Generate random phase shifts
     min_phase=0;
