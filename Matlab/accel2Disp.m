@@ -6,11 +6,11 @@ function displacement = accel2Disp(accel, fs,t)
    % t = (0:dt:stoptime)'; % seconds 
     
     accel = accel-mean(accel);
-    accel = detrend(accel);
+    
     
     velocity = cumtrapz(t,accel);
     velocity = velocity-mean(velocity);
-    velocity = detrend(velocity, 2);
+   
     
     
     displacement = cumtrapz(t,velocity);
