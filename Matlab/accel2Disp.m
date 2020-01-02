@@ -8,13 +8,13 @@ function displacement = accel2Disp(accel, fs)
     accel = accel-mean(accel);
     
     velocity = cumtrapz(t,accel);
-    velocity = velocity-mean(velocity)
+    velocity = velocity-mean(velocity);
     
     
     displacement = cumtrapz(t,velocity);
     
     hold off
-    figure(2)
+    figure(2005)
     
     
     h = tiledlayout(3,1);
