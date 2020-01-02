@@ -8,14 +8,11 @@ freq_max = 0.67;
 freq_range = freq_max-freq_min;
 
 freq_bin_width = freq_range/h.NumBins
-freq_bins      = (freq_min:freq_bin_width:freq_max)';
+wave_frequencies      = (freq_min:freq_bin_width:freq_max)';
 
 amplitudes = h.Values()';
-amps = length(amplitudes)
-f = length(freq_bins)
-nnz(~h.Values)
 
-plot(freq_bins(1:num_waves), amplitudes/2000);
+plot(wave_frequencies(1:num_waves), amplitudes/2000);
 xlabel('Wave Frequency (Hz)')
 ylabel('Wave Amplitude (M)')
 
