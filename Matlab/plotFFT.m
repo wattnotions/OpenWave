@@ -15,7 +15,7 @@ function p = plotFFT(Fs, sample_length, S);
     f = Fs*(0:(L/2))/L;
     plot(f,P1) 
     grid
-    A = trapz(f, P1)
+    A = trapz(f, P1);
     title('Single-Sided Amplitude Spectrum of X(t)')
     xlabel('f (Hz)')
     ylabel('|P1(f)|')
