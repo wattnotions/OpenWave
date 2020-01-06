@@ -2,7 +2,8 @@
 1. Reads data from a file in the rotating_arm_data folder
 2. Gets the acceleration and timestamp values
 3. Plots the Z acceleration
-4. Converts the Z acceleration to displacement
+4. Converts the Z acceleration to displacement (plots accel, velocity and
+disp)
 5. Plots an FFT of the displacement signal
 6. Calculates the significant wave height of the disp signal using two
 methods, highest 3rd and std dev.
