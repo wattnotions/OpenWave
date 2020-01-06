@@ -1,4 +1,15 @@
-function p = plotFFT(Fs, sample_length, S);
+%{
+1. Takes the FFT of a time domain signal and plots it
+
+Arguments:
+Fs            : Sample rate of time domain signal
+sample_length : Number of samples in signal
+S             : Time domain signal
+
+Example usage: plotFFT(20, 1028, S);
+%}
+
+function plotFFT(Fs, sample_length, S);
                 
     T = 1/Fs;             % Sampling period       
     L = sample_length;            % Length of signal

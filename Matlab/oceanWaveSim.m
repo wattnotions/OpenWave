@@ -1,3 +1,19 @@
+%{
+1. Generates a rayleigh distribution using the randraw function
+2. Uses this distribution to generate a number of sine waves (num_waves
+variable)
+3. Adds all of these sine waves together to generate simulated ocean wave
+surface displacement data
+
+Arguments:
+num_waves : number of sine waves to generate
+amp_scale : rayleigh dist amplitudes get multiplied by this factor
+fs        : sample rate to use
+stoptime  : Duration of the wave data in seconds
+
+Example usage : oceanWaveSim(100, 1, 20, 60);
+%}
+
 function sim_wave = oceanWaveSim(num_waves, amp_scale, fs, stoptime)
 
     y = randraw('rayl', 1, 1e6 );

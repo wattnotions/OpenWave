@@ -1,9 +1,15 @@
-function displacement = accel2Disp(accel, fs,t)
+%{
+1. Takes acceleration time domain signal and integrates it twice
+2. This gives you a displacement signal
 
-    
-    dt=1/fs;
-    stoptime = (length(accel)-1)/fs;
-   % t = (0:dt:stoptime)'; % seconds 
+Arguments:
+accel : time domain acceleration signal
+t    :  sample timestamps in seconds(first sample start at time=0)
+
+%}
+
+function displacement = accel2Disp(accel,t)
+
     
     accel = accel-mean(accel);
     

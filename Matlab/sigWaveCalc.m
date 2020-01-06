@@ -1,3 +1,15 @@
+%{
+1.Finds local maxima and minima of time domain signal S
+2. Uses these extrema to break signal into individual 'waves' where a wave
+is the difference between one minima and the next maxima
+3. All wave heights are calculated and the highest third of values are then
+averaged to get significant wave height
+
+Arguments:
+S : Time domain signal
+
+%}
+
 function sig_wave_height = sigWaveCalc(S);
 
 

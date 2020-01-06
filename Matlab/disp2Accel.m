@@ -1,3 +1,12 @@
+%{
+1. Takes time domain displacement signal
+2. Differentiates it twice to get acceleration
+
+Arguments:
+displacement: time domain displacement signal
+fs          : sample_rate
+%}
+
 function accel = disp2Accel(displacement, fs)
 
     

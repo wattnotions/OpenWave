@@ -1,3 +1,13 @@
+%{
+1.Generates a sine wave
+
+Arguments:
+Self explanatory mostly
+fs       : Sample rate
+stoptime : signal duration in seconds
+
+%}
+
 function y = sineGen(amplitude, freq, phase, stoptime, fs)
 
     
