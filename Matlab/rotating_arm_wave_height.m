@@ -2,7 +2,7 @@
 fs = 20;
 
 %%% read accel data from csv file
-T = readtable('../test_data/rotating_arm_data/20cm_3v.csv');
+T = readtable('../test_data/rotating_arm_data/30cm_3v.csv');
 z_accel = table2array(T(:,3)); %z_accel
 timestamps = table2array(T(:,9)); %timestamps
 t = formatTimestamp(timestamps); %X axis (milliseconds)
@@ -24,6 +24,7 @@ disp = highpass(disp,0.1, fs,'Steepness',0.96);
 plotFFT(fs, length(disp), disp)
 
 fprintf('Sig wave height (highest 3rd) = %0.2f\n',sigWaveCalc(disp));
+fprintf('Sig wave height 4*std = %0.2f\n',4*std(disp));
 
 %plot displacement signal
 figure(1003)
