@@ -1,3 +1,9 @@
+%{ 
+1.Takes the fft of time domain signal
+2. Converts fft to power-spectral-distribution(PSD)
+3. Finds the area under the PSD curve
+%}
+
 function area = psdArea(x, fs);
     
     rng default
