@@ -1,6 +1,5 @@
 
 fs = 20;
-
 %%% read accel data from csv file
 T = readtable('../test_data/rotating_arm_data/30cm_3v.csv');
 z_accel = table2array(T(:,3)); %z_accel
@@ -15,7 +14,7 @@ title('Z axis acceleration');
 xlabel('Time (Seconds)');
 
 z_accel = z_accel - mean(z_accel); %remove dc offset
-disp = accel2Disp(z_accel, fs,t);    %convert accel to displacement
+disp = accel2Disp(z_accel,t);    %convert accel to displacement
 disp = disp-mean(disp);             
 
 
