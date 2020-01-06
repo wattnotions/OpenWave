@@ -1,18 +1,17 @@
 function sim_wave = oceanWaveSim(num_waves, amp_scale, fs, stoptime)
 
     y = randraw('rayl', 1, 1e6 );
-    h = histogram(y);
    
-    h.NumBins = num_waves;
+    [amps, edges] = histcounts(y, num_waves);
+    
 
     freq_min = 0.05;
     freq_max = 0.67;
     freq_range = freq_max-freq_min;
 
-    freq_bin_width = freq_range/h.NumBins
+    freq_bin_width = freq_range/num_waves;
     freqs          = (freq_min:freq_bin_width:freq_max)';
-
-    amps = h.Values()';
+    
     amps = amps/max(amps);
     amps = amps*amp_scale;
 
