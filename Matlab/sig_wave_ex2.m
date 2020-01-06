@@ -14,7 +14,7 @@ sample_length = (fs*stoptime)+1;
 t = (0:dt:stoptime)'; % seconds 
 
 S = oceanWaveSim(num_waves, 1, fs, stoptime);
-psd_area = psd_test(S, fs);
+psd_area = psdArea(S, fs);
 
 
 fprintf('Elevation data signal variance = %0.2f\n',var(S));
