@@ -1,7 +1,17 @@
+%{
+1. Reads data from a file in the rotating_arm_data folder
+2. Gets the acceleration and timestamp values
+3. Plots the Z acceleration
+4. Converts the Z acceleration to displacement
+5. Plots an FFT of the displacement signal
+6. Calculates the significant wave height of the disp signal using two
+methods, highest 3rd and std dev.
+7. Plots the time domain signal
+%}
 
-fs = 20;
+
 %%% read accel data from csv file
-T = readtable('../test_data/rotating_arm_data/30cm_3v.csv');
+T = readtable('../test_data/rotating_arm_data/40cm_3v.csv');
 z_accel = table2array(T(:,3)); %z_accel
 timestamps = table2array(T(:,9)); %timestamps
 t = formatTimestamp(timestamps); %X axis (milliseconds)
