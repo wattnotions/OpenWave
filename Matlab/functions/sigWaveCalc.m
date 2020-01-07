@@ -10,7 +10,7 @@ S : Time domain signal
 
 %}
 
-function sig_wave_height = sigWaveCalc(S);
+function [sig_wave_height,avg] = sigWaveCalc(S);
 
 
 
@@ -32,9 +32,11 @@ function sig_wave_height = sigWaveCalc(S);
 
     wave_heights = S(t1(1:max_length))-S(t2(1:max_length));
     wave_heights = sort(wave_heights');
-
+    avg =  mean(wave_heights);
+    
     top_third_index = round( length(wave_heights)*0.67);
     sig_wave_height = mean(wave_heights(top_third_index:length(wave_heights)));
+   
 
 
     % Visualize results
