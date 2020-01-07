@@ -14,6 +14,6 @@ function t = formatTimestamp(timestamps);
         
     end
     
-    t = t/1000;
+    t = t/1000; %return times in seconds
 
 end
