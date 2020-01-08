@@ -8,17 +8,19 @@ t    :  sample timestamps in seconds(first sample start at time=0)
 
 %}
 
-function displacement = accel2Disp(accel,t)
-
+function [displacement, velocity] = accel2Disp(accel,t);
     
+
+   
+   
     accel = accel-mean(accel);
     velocity = cumtrapz(t,accel);
-    
     velocity = velocity-mean(velocity);
+
     displacement = cumtrapz(t,velocity);
     displacement = displacement-mean(displacement);
     
-    %{
+    
     hold off
     figure(2005)
     
@@ -42,6 +44,6 @@ function displacement = accel2Disp(accel,t)
     xlabel('Time (Seconds)');
     
     title(h, 'Acceleration to Displacement')
-    %}
+    
     
 end
