@@ -18,6 +18,22 @@ original_displacement = oceanWaveSim(num_waves, 0.01, fs, stoptime);
 %convert displacement to acceleration
 [differentiated_accel, differentiated_velocity] = disp2Accel(original_displacement, t);
 
+%plot fft of original displacement, velocity (disp differentiated once),
+%and acceleration(disp differentiated twice)
+figure(11)
+g = tiledlayout(3,1);
+
+nexttile
+multiPlotFFT(fs, length(original_displacement), original_displacement, 'original displacement')
+
+nexttile
+multiPlotFFT(fs, length(differentiated_velocity), differentiated_velocity, 'differentiated velocity')
+
+nexttile
+multiPlotFFT(fs, length(differentiated_accel), differentiated_accel, 'differentiated accel')
+
+title(g, 'Displacement to acceleration')
+
 %convert acceleration derived above back to displacement
 [integrated_disp, integrated_velocity] = accel2Disp(differentiated_accel, t);
 
@@ -44,24 +60,10 @@ title(h, 'Acceleration to displacement')
 
 
 
-figure(11)
-g = tiledlayout(3,1);
-
-nexttile
-multiPlotFFT(fs, length(original_displacement), original_displacement, 'original displacement')
-
-nexttile
-multiPlotFFT(fs, length(differentiated_velocity), differentiated_velocity, 'differentiated velocity')
-
-nexttile
-multiPlotFFT(fs, length(differentiated_accel), differentiated_accel, 'differentiated accel')
-
-title(g, 'Displacement to acceleration')
 
 
 
 %plot original displacement signal vs new derived displacement signal
-
 figure(3001)
 plot(t,integrated_disp)
 hold on
