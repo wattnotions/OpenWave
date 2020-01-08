@@ -7,12 +7,12 @@ displacement: time domain displacement signal
 fs          : sample_rate
 %}
 
-function accel = disp2Accel(displacement, fs)
+function [accel, velocity] = disp2Accel(displacement, t)
 
     
-    dt=1/fs;
-    stoptime = (length(displacement)-1)/fs;
-    t = (0:dt:stoptime)'; % seconds 
+    
+    %stoptime = (length(displacement)-1)/fs;
+    % t = (0:dt:stoptime)'; % seconds 
     
     
     velocity = gradient(displacement(:)) ./ gradient(t(:));
