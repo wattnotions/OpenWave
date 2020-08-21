@@ -130,8 +130,12 @@ class BNO055:
         self._system_trigger(0x80 if value else 0x00)
         self.operation_mode(last_mode)
         
-    def save_calibration_data(self):        
+    def save_calibration_data(self): 
+        self.operation_mode(CONFIG_MODE)
+        utime.sleep_ms(50)
         calib_data = self.i2c.readfrom_mem(0x28, 0x55, 22)
+        self.operation_mode(NDOF_MODE)
+        utime.sleep_ms(50)
         if calib_data:
             f = open('calibration.bin', 'wb')
             f.write(calib_data)
@@ -141,10 +145,14 @@ class BNO055:
             print("Calibration data not saved!")
             
     def load_calibration_data(self):
+    
+        self.operation_mode(CONFIG_MODE)
+        utime.sleep_ms(50)
         f = open("calibration.bin", 'rb')
         saved_calib = f.read()
-        print(saved_calib)
         self.i2c.writeto_mem(0x28, 0x55, saved_calib)
         f.close()
+        self.operation_mode(NDOF_MODE)
+        utime.sleep_ms(50)
         print("Loaded {} bytes of calibration data".format(len(saved_calib)))
         
