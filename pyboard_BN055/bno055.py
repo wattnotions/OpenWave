@@ -129,3 +129,22 @@ class BNO055:
         self._page_id(0)
         self._system_trigger(0x80 if value else 0x00)
         self.operation_mode(last_mode)
+        
+    def save_calibration_data(self):        
+        calib_data = self.i2c.readfrom_mem(0x28, 0x55, 22)
+        if calib_data:
+            f = open('calibration.bin', 'wb')
+            f.write(calib_data)
+            f.close()
+            print("Saved {} bytes of calibration data".format(len(calib_data)))
+        else:
+            print("Calibration data not saved!")
+            
+    def load_calibration_data(self):
+        f = open("calibration.bin", 'rb')
+        saved_calib = f.read()
+        print(saved_calib)
+        self.i2c.writeto_mem(0x28, 0x55, saved_calib)
+        f.close()
+        print("Loaded {} bytes of calibration data".format(len(saved_calib)))
+        
