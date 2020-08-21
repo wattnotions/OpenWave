@@ -5,8 +5,14 @@ import time
 i2c = I2C(1,freq=100000)
 calib_data = i2c.readfrom_mem(0x28, 0x55, 22)
 print(calib_data)
-f = open('calibration.txt', 'w')
+f = open('calibration.bin', 'wb')
 f.write(calib_data)
+f.close()
+
+time.sleep_ms(500)
+f = open("calibration.bin", 'rb')
+old_calib = f.read()
+print(old_calib)
 f.close()
 
 s = bno055.BNO055(i2c)
