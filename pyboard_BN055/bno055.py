@@ -83,6 +83,19 @@ class BNO055:
                                   value=None, scale=1/100)
     gravity = partial(_registers, register=0x2e, struct='<hhh',
                       value=None, scale=1/100)
+     
+    calib_stat = partial(_register, register=0x35, value=None)
+     
+    def print_cal(self):
+        
+        
+        stat_byte = self.calib_stat()
+        sys_stat = (stat_byte >> 6) & 0b11
+        gyr_stat = (stat_byte >> 4) & 0b11
+        acc_stat = (stat_byte >> 2) & 0b11
+        mag_stat = (stat_byte)      & 0b11
+        
+        print("Sys = {}, gyr = {}, acc = {}, mag = {}".format(sys_stat, gyr_stat, acc_stat, mag_stat))
 
     def init(self, mode=NDOF_MODE):
         chip_id = self._chip_id()
