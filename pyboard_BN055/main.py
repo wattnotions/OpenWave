@@ -3,6 +3,7 @@ from machine import Pin, I2C, UART
 import time
 from binascii import hexlify
 
+
 import micropython
 micropython.alloc_emergency_exception_buf(100)
 
@@ -12,8 +13,8 @@ i2c = I2C(1,freq=100000)
 
     
 
-tim4 = pyb.Timer(4, freq=10)
-s = bno055.BNO055(i2c, tim4)
+tim2 = pyb.Timer(2, freq=100)
+s = bno055.BNO055(i2c, tim2)
 
 
 
@@ -23,7 +24,7 @@ print(s.temperature())
 
 
 
-uart = UART(3, 115200)                         # init with given baudrate
+                         
 
 
 

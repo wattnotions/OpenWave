@@ -2,7 +2,8 @@ from micropython import const
 import ustruct
 import utime
 from functools import partial
-
+from machine import UART
+from binascii import hexlify
 
 _CHIP_ID = const(0xa0)
 
@@ -46,6 +47,7 @@ class BNO055:
         self.init()
         timer.callback(self.print_linaccel)
         self.linaccelbytes = bytearray(6)
+        self.uart = UART(3, 115200)
 
     def _registers(self, register, struct, value=None, scale=1):
         if value is None:
@@ -90,7 +92,10 @@ class BNO055:
     
     def print_linaccel(self, tim): # work around to get timer interrupts working
         self.i2c.readfrom_mem_into(0x28, 0x28, self.linaccelbytes)
-        print(self.linaccelbytes)
+        self.uart.write(self.linaccelbytes)
+        self.uart.write(utime.ticks_us()+'\r\n')
+        print(utime.ticks_us())
+        
     def print_cal(self):
         
         
