@@ -40,10 +40,12 @@ class BNO055:
         print(s.euler())
     """
 
-    def __init__(self, i2c, address=0x28):
+    def __init__(self, i2c, timer, address=0x28 ):
         self.i2c = i2c
         self.address = address
         self.init()
+        timer.callback(self.print_linaccel)
+        self.linaccelbytes = bytearray(6)
 
     def _registers(self, register, struct, value=None, scale=1):
         if value is None:
@@ -85,7 +87,10 @@ class BNO055:
                       value=None, scale=1/100)
      
     calib_stat = partial(_register, register=0x35, value=None)
-     
+    
+    def print_linaccel(self, tim): # work around to get timer interrupts working
+        self.i2c.readfrom_mem_into(0x28, 0x28, self.linaccelbytes)
+        print(self.linaccelbytes)
     def print_cal(self):
         
         
