@@ -5,16 +5,21 @@ from binascii import hexlify
 
 
 import micropython
-micropython.alloc_emergency_exception_buf(100)
+micropython.alloc_emergency_exception_buf(200)
 
 i2c = I2C(1,freq=100000)
 
+timer_flag = 0
 
+tim2 = pyb.Timer(2, freq=10)
 
+def set_timer_flag(tim2):
+    print("in interrupt")
     
 
-tim2 = pyb.Timer(2, freq=100)
-s = bno055.BNO055(i2c, tim2)
+
+tim2.callback(set_timer_flag)
+s = bno055.BNO055(i2c)
 
 
 
@@ -22,20 +27,10 @@ s = bno055.BNO055(i2c, tim2)
 s.load_calibration_data()
 print(s.temperature())
 
+test = 1
 
-
-                         
-
-
-
-
-#while True:
-#    uart.write('hello\r\n')
-#    print("Sent hello")
-#    time.sleep(1)
-
-
-#while True:
-#    print(s.euler(), end='\r')
-#    time.sleep_ms(100)
-#    print('\x1b[2K\r', end='')
+while(True):
+    if(test == 1):
+        print("test = 1")
+    else:
+        print("test = 0")
