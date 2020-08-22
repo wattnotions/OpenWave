@@ -157,7 +157,12 @@ class BNO055:
     
         self.operation_mode(CONFIG_MODE)
         utime.sleep_ms(50)
-        f = open("calibration.bin", 'rb')
+        try:
+            f = open("calibration.bin", 'rb')
+        except OSError:
+            print("Calibration file not found, update failed")
+            self.operation_mode(NDOF_MODE)
+            return
         saved_calib = f.read()
         self.i2c.writeto_mem(0x28, 0x55, saved_calib)
         f.close()
