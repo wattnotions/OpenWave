@@ -26,8 +26,10 @@ linbytes = bytearray(6)
 def set_timer_flag(tim2):
     global ttime
     global linbytes
+    global timer_flag
     ttime = time.ticks_us()
     i2c.readfrom_mem_into(0x28, 0x28, linbytes)
+    timer_flag = 1
     
 
 
@@ -45,12 +47,10 @@ print(s.temperature())
 test = 0
 while(True):
 
-   # pyb.disable_irq()
-    tf = timer_flag
-   # pyb.enable_irq()
-    if(tf== 1):
+  
+    if(timer_flag== 1):
 	timer_flag = 0
-        i2c.readfrom_mem(0x28, 0x28, 6)
-	print(str(time.ticks_us()) )
+        #print(linbytes, end = ',')
+	print(str(ttime) )
         
   
