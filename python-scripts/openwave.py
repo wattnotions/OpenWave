@@ -13,6 +13,15 @@ from prettytable import PrettyTable
 import random
 from scipy.signal import butter, lfilter, freqz
 
+# This script is designed to open a csv file containing data from a BNO055 IMU
+# It can take the raw linear acceleration z axis data and convert it into displacement
+# in order to get an estimation of vertical displacement
+#
+# Written with Python 2
+#
+
+
+
 ### open csv file and get required parameters ###
 ###csv format : (lin accel) X, Y, Z, (Euler) X, Y, Z, (MAG) X, Y , TIMESTAMP######
 
