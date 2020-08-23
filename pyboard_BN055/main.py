@@ -15,6 +15,7 @@ import micropython
 micropython.alloc_emergency_exception_buf(100)
 
 i2c = I2C(1,freq=400000)
+bt_uart = UART(3, 115200) # connected to bluetooth module
 
 timer_flag = 0
 
@@ -50,7 +51,9 @@ while(True):
   
     if(timer_flag== 1):
 	timer_flag = 0
-        #print(linbytes, end = ',')
-	print(str(ttime) )
+        #(bytes(linbytes), end = ',')
+	#print(str(ttime) )
+        bt_uart.write(bytes(linbytes))
+        bt_uart.write(", " + str(ttime) + '\r\n')
         
   
