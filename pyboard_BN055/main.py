@@ -2,6 +2,7 @@ import bno055
 from machine import Pin, I2C, UART
 import time
 from binascii import hexlify
+import ustruct
 
 
 print("......")
@@ -51,9 +52,9 @@ while(True):
   
     if(timer_flag== 1):
 	timer_flag = 0
-        #(bytes(linbytes), end = ',')
-	#print(str(ttime) )
-        bt_uart.write(bytes(linbytes))
-        bt_uart.write(", " + str(ttime) + '\r\n')
+        data = ustruct.unpack("<hhh", linbytes)    #convert raw bytes to ints
+        data = ','.join(map(str,data))              #convert tuple to string
+        bt_uart.write(data)                        #write linaccel data
+        bt_uart.write(", " + str(ttime) + '\r\n')  #append timestamp
         
   
