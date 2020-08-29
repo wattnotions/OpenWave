@@ -35,10 +35,11 @@ def set_timer_flag(tim2):
     
 
 
-tim2.callback(set_timer_flag)
+
 s = bno055.BNO055(i2c)
 
-
+time.sleep(1)
+tim2.callback(set_timer_flag)
 
 
 
