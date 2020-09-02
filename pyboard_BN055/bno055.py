@@ -165,7 +165,6 @@ class BNO055:
         if calib_data:
             with open('calibration.bin', 'wb') as f:
                 f.write(calib_data)
-                f.close()
                 print("Saved {} bytes of calibration data".format(len(calib_data)))
         else:
             print("Calibration data not saved!")
@@ -180,4 +179,3 @@ class BNO055:
             self.operation_mode(NDOF_MODE)
             utime.sleep_ms(50)
             print("Loaded {} bytes of calibration data".format(len(saved_calib)))
-        
