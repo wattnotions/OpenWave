@@ -95,7 +95,7 @@ class BNO055:
         self.i2c.readfrom_mem_into(0x28, 0x28, self.linaccelbytes)
         
         
-    def print_cal(self):
+    def get_cal_status(self):
         
         
         stat_byte = self.calib_stat()
@@ -105,6 +105,20 @@ class BNO055:
         mag_stat = (stat_byte)      & 0b11
         
         print("Sys = {}, gyr = {}, acc = {}, mag = {}".format(sys_stat, gyr_stat, acc_stat, mag_stat))
+        
+        return [sys_stat, acc_stat]  ##sys_stat will go to 3 when gyr and mag do. Acc is seperate so need to check seperately
+        
+        
+    def manual_calibration(self):
+        calib_complete = False
+        while (not calib_complete):
+            utime.sleep_ms(300)
+            cal_stats = self.get_cal_status()
+            if cal_stats[0] == cal_stats[1] == 3:
+                calib_complete = True
+                self.save_calibration_data()
+            
+        
 
     def init(self, mode=NDOF_MODE):
         chip_id = self._chip_id()
@@ -142,14 +156,17 @@ class BNO055:
     def save_calibration_data(self): 
         self.operation_mode(CONFIG_MODE)
         utime.sleep_ms(50)
-        calib_data = self.i2c.readfrom_mem(0x28, 0x55, 22)
+        try:
+            calib_data = self.i2c.readfrom_mem(0x28, 0x55, 22)
+        except:
+            pass
         self.operation_mode(NDOF_MODE)
         utime.sleep_ms(50)
         if calib_data:
-            f = open('calibration.bin', 'wb')
-            f.write(calib_data)
-            f.close()
-            print("Saved {} bytes of calibration data".format(len(calib_data)))
+            with open('calibration.bin', 'wb') as f:
+                f.write(calib_data)
+                f.close()
+                print("Saved {} bytes of calibration data".format(len(calib_data)))
         else:
             print("Calibration data not saved!")
             
@@ -157,16 +174,10 @@ class BNO055:
     
         self.operation_mode(CONFIG_MODE)
         utime.sleep_ms(50)
-        try:
-            f = open("calibration.bin", 'rb')
-        except OSError:
-            print("Calibration file not found, update failed")
+        with open('calibration.bin', 'rb') as f:
+            saved_calib = f.read()
+            self.i2c.writeto_mem(0x28, 0x55, saved_calib)
             self.operation_mode(NDOF_MODE)
-            return
-        saved_calib = f.read()
-        self.i2c.writeto_mem(0x28, 0x55, saved_calib)
-        f.close()
-        self.operation_mode(NDOF_MODE)
-        utime.sleep_ms(50)
-        print("Loaded {} bytes of calibration data".format(len(saved_calib)))
+            utime.sleep_ms(50)
+            print("Loaded {} bytes of calibration data".format(len(saved_calib)))
         
