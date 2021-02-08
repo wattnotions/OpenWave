@@ -15,17 +15,22 @@ int led = 13;
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize the digital pin as an output.
+  // h bridge signals
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);
+
+  //end stop
+  pinMode(12,INPUT_PULLUP);
   
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
 
-  
+  Serial.print(digitalRead(12));
+  delay(500);
    
   
   
@@ -42,7 +47,7 @@ void loop() {
 }
 
 
-void forward(delay_us){
+void forward(int delay_us){
   digitalWrite(2, HIGH);   
   digitalWrite(3, LOW);  
   delayMicroseconds(delay_us); 
@@ -60,7 +65,7 @@ void forward(delay_us){
   delayMicroseconds(delay_us);   
 }
 
-void reverse(delay_us){
+void reverse(int delay_us){
   digitalWrite(4, HIGH);   
   digitalWrite(5, LOW);
   delayMicroseconds(delay_us);
