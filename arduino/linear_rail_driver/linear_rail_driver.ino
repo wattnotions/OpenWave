@@ -36,53 +36,44 @@ void setup() {
 // the loop routine runs over and over again forever:
 
 int step_count,i;
+unsigned long start_time, end_time, delta;
 void loop() {
 
-  go_home();
+  go_home(2000);
 
-  while(1){
+  
     Serial.println("START OF WHILE LOOP");
     i=0;
+    start_time = millis();
+    
     while(step_count < 7000){
       
-      up(5000);
-      Serial.println(step_count);
+      up(2750);
+      //Serial.println(step_count);
       if(END_STOP == ON) {
         Serial.println("END STOP PRESSED");
         while(1){};
         }
     }
 
-    i=0;
-    Serial.println("OUT OF FIRST LOOP");
-    while(step_count > 0){
-     
-      down(5000);
-      Serial.println(step_count);
-      if(END_STOP == ON) {
-        Serial.println("END STOP PRESSED");
-        while(1){};
-        }
-    }
-    
-  }
-  
-  while(1){}
+    end_time = millis();
+    delta = end_time - start_time;
+    Serial.println(delta);
 
+    go_home(2000);
+    while(1){}
   
 }
 
-void go_home(void){
+void go_home(int ms_delay){
   
   while(END_STOP == 1){
-    down(5000);
-    Serial.println(step_count);
+    down(ms_delay);
   }
 
 
   while(END_STOP == 0){
-    up(5000);
-    Serial.println(step_count);
+    up(ms_delay);
   }
 
   step_count = 0;

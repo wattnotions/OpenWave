@@ -17,12 +17,15 @@ Example usage : oceanWaveSim(100, 1, 20, 60);
 function sim_wave = oceanWaveSim(num_waves, amp_scale, fs, stoptime)
 
     y = randraw('rayl', 1, 1e6 );
+    
    
     [amps, edges] = histcounts(y, num_waves);
     
+    
 
     freq_min = 0.05;
-    freq_max = 0.67;
+    %freq_max = 0.67;
+    freq_max = 0.2
     freq_range = freq_max-freq_min;
 
     freq_bin_width = freq_range/num_waves;
