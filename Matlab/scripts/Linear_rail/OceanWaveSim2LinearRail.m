@@ -17,19 +17,19 @@ can be found in OpenWave\arduino\linear_rail_driver\Step_delay2speed.xlsx
 %}
 
 num_waves = 30;
-fs = 4;
+fs = 100;
 dt=1/fs;
 stoptime = 30; %signal length in seconds
 t = (0:dt:stoptime)'; % make time x axis
 
-original_displacement = oceanWaveSim(num_waves, 20, fs, stoptime);
+original_displacement = oceanWaveSim(num_waves, 2, fs, stoptime);
 
 plot(t, original_displacement)
 hold on
 [differentiated_accel, differentiated_velocity] = disp2Accel(original_displacement, t);
 
-n = numel(original_displacement);
-for i = 1:n
-    disp(original_displacement(1:i))
-    pause(dt)
+for n=1 : length(original_displacement)
+    disp(original_displacement(n))
+    pause(0.5)
+    
 end
