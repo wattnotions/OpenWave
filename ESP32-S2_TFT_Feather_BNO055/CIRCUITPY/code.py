@@ -65,6 +65,18 @@ def temperature():
     return result
 
 
+HOST = "192.168.0.24"
+PORT = 8000
+
+# Initialize a socket pool
+pool = socketpool.SocketPool(wifi.radio)
+
+# Create a TCP socket
+sock = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
+
+# Use the socket to connect to the server
+sock.connect((HOST, PORT))
+
 while True:
     print("Temperature: {} degrees C".format(sensor.temperature))
     """
@@ -81,22 +93,16 @@ while True:
     print("Gravity (m/s^2): {}".format(sensor.gravity))
     print()
     
-    HOST = "192.168.0.24"
-    PORT = 8000
+  
  
  
     
 
-    # Initialize a socket pool
-    pool = socketpool.SocketPool(wifi.radio)
-
-    # Create a TCP socket
-    sock = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
-
-    # Use the socket to connect to the server
-    sock.connect((HOST, PORT))
-
-    # Send some data
-    sock.send(b'Hello, world!')
     
+    accel_data = sensor.acceleration
+    if accel_data is not None:
+        # Convert the data to string, then to bytes, and send
+        accel_data_str = "Accelerometer: {}".format(accel_data)
+        print(len(accel_data_str))
+        sock.send(bytes(accel_data_str, "utf-8"))
     time.sleep(1)
