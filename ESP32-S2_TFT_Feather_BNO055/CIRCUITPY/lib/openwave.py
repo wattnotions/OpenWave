@@ -8,6 +8,11 @@ class Interfaces:
         
         self.i2c = None
         self.sensor = None
+        self.pool = socketpool.SocketPool(wifi.radio)
+        self.sock = self.pool.socket(self.pool.AF_INET, self.pool.SOCK_STREAM)
+        self.port=None
+        self.host=None
+        
         
 
     def setup_i2c(self, i2c):
@@ -20,10 +25,23 @@ class Interfaces:
         print("Connected to 5035")
         
         
-    def setup_socket(self, host, port):
-        pool = socketpool.SocketPool(wifi.radio)
-        sock = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
-        sock.connect((self.host, self.port))
+    def socket_connect(self, host, port):
+    
+        self.host = host
+        self.port = port
+    
+        try:
+            self.sock.connect((self.host, self.port))
+        except Exception as e:
+            print(e)
+            
+    def socket_send(self, data):
+        try:
+            self.sock.send(bytes(data, "utf-8"))
+        except Exception as e:
+            print(e)
+            print("attempting socket reconnect....")
+            self.socket_connect(self.host, self.port)
 
     def print_imu_parameters(self):
         if self.sensor is not None:

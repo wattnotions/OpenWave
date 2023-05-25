@@ -11,6 +11,7 @@ interface = openwave.Interfaces()
 
 interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
 interface.setup_i2c(board.I2C())
+interface.socket_connect("192.168.0.24", 8000)
 
 
 
@@ -21,19 +22,12 @@ while True:
 
 
     interface.print_imu_parameters()
+    
+    accel_data_str = "Accelerometer: {}".format(interface.sensor.acceleration)
+    interface.socket_send(bytes(accel_data_str, "utf-8"))
     time.sleep(1)
     
   
  
  
-    
-
-    """
-    accel_data = sensor.acceleration
-    if accel_data is not None:
-        # Convert the data to string, then to bytes, and send
-        accel_data_str = "Accelerometer: {}".format(accel_data)
-        print(len(accel_data_str))
-        sock.send(bytes(accel_data_str, "utf-8"))
-    time.sleep(1)
-"""
+ 
