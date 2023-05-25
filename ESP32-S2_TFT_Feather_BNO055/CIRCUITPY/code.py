@@ -4,44 +4,24 @@ print("Hello World!")
 
 import time
 import ssl
-import socketpool
-import wifi
 import board
-import adafruit_bno055
+import openwave
+
+interface = openwave.Interfaces()
+
+interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
+interface.setup_i2c(board.I2C())
 
 
 
-print("Connecting to wifi")
-wifi.radio.connect('VM5035215', 'v67tjrzjRdje')
-print("Connected to 5035")
 
 
-
-i2c = board.I2C()  # uses board.SCL and board.SDA
-sensor = adafruit_bno055.BNO055_I2C(i2c)
-
-
-
-HOST = "192.168.0.24"
-PORT = 8000
-
-# Initialize a socket pool
-#pool = socketpool.SocketPool(wifi.radio)
-#sock = pool.socket(pool.AF_INET, pool.SOCK_STREAM)
-#sock.connect((HOST, PORT))
 
 while True:
 
 
-    print("Temperature: {} degrees C".format(sensor.temperature))
-    print("Accelerometer (m/s^2): {}".format(sensor.acceleration))
-    print("Magnetometer (microteslas): {}".format(sensor.magnetic))
-    print("Gyroscope (rad/sec): {}".format(sensor.gyro))
-    print("Euler angle: {}".format(sensor.euler))
-    print("Quaternion: {}".format(sensor.quaternion))
-    print("Linear acceleration (m/s^2): {}".format(sensor.linear_acceleration))
-    print("Gravity (m/s^2): {}".format(sensor.gravity))
-    print()
+    interface.print_imu_parameters()
+    time.sleep(1)
     
   
  
