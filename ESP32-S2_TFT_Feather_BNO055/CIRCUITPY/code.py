@@ -6,27 +6,19 @@ import time
 import ssl
 import board
 import openwave
+import digitalio
+import storage
 
 interface = openwave.Interfaces()
 
-interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
+#interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
 interface.setup_i2c(board.I2C())
-interface.socket_connect("192.168.0.24", 8000)
+#interface.socket_connect("192.168.0.24", 8000)
 
 
 
 
-
-
-while True:
-
-
-    interface.print_imu_parameters()
-    
-    accel_data_str = "Accelerometer: {}".format(interface.sensor.acceleration)
-    interface.socket_send(bytes(accel_data_str, "utf-8"))
-    time.sleep(1)
-    
+interface.record_linaccel(10, 60)
   
  
  

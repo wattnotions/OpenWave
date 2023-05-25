@@ -2,6 +2,7 @@ import board
 import adafruit_bno055
 import wifi
 import socketpool
+import time
 
 class Interfaces:
     def __init__(self):
@@ -56,3 +57,37 @@ class Interfaces:
             print()
         else:
             print("Sensor not initialized. Please call setup_i2c method first.")
+            
+            
+    def record_linaccel(self, sample_rate, duration):
+        if self.sensor is None:
+            print("Sensor not initialized. Please call setup_i2c method first.")
+            return
+
+        # Create file name based on current time
+       
+
+        start_time = time.time()
+        end_time = start_time + duration
+        sample_interval = 1.0 / sample_rate
+
+        next_sample_time = start_time
+
+        with open("accel.csv", "w") as f:
+            while time.time() < end_time:
+                # If it's time for the next sample...
+                if time.time() >= next_sample_time:
+                    # Write a sample to the file
+                    f.write(str(self.sensor.linear_acceleration))
+                    f.write('\n')
+
+                    # Schedule the next sample
+                    next_sample_time += sample_interval
+
+                # Compute and print progress bar
+                elapsed_time = time.time() - start_time
+                progress = elapsed_time / duration
+                progress_bar = '[' + '='*int(progress*20) + ' '*(20-int(progress*20)) + ']'
+                print(f"Recording: {progress_bar} {int(progress*100)}%", end='\r')
+
+        print()  # Finish the line for the progress bar
