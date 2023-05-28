@@ -9,11 +9,14 @@ import openwave
 import digitalio
 import storage
 
+
+
 interface = openwave.Interfaces()
 
-#interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
+interface.setup_wifi('VM5035215', 'v67tjrzjRdje')
 interface.setup_i2c(board.I2C())
 #interface.socket_connect("192.168.0.24", 8000)
+interface.get_ntp_time()
 
 
 

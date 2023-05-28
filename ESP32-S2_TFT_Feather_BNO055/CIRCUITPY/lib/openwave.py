@@ -3,6 +3,8 @@ import adafruit_bno055
 import wifi
 import socketpool
 import time
+import rtc
+import adafruit_ntp
 
 class Interfaces:
     def __init__(self):
@@ -91,3 +93,26 @@ class Interfaces:
                 print(f"Recording: {progress_bar} {int(progress*100)}%", end='\r')
 
         print()  # Finish the line for the progress bar
+
+
+    def get_ntp_time(self):
+        ntp = adafruit_ntp.NTP(self.pool)
+        valid_time=False
+        # Fetch and set time
+        ntp = adafruit_ntp.NTP(self.pool, tz_offset=0)
+
+        
+
+        # Fetch time
+        try:
+            current_time = ntp.datetime
+            print("Current time:", current_time)
+        except OSError:
+            print("Unable to get time from NTP server")
+
+        # Set the RTC to the local time
+        my_rtc = rtc.RTC()
+        my_rtc.datetime = current_time
+
+        # Check the time
+        print("RTC time:", my_rtc.datetime)
